@@ -1,0 +1,79 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/mobilityGraphs.log
+  log type:  text
+ opened on:  15 Jun 2020, 08:42:33
+
+. 
+. *migration rates by distance, 1948--2018
+. insheet using ${datapath}moveRates.csv, comma clear case
+(3 vars, 315 obs)
+
+. set obs `=_N+4'
+number of observations (_N) was 315, now 319
+
+. replace year = 1972 in `=_N'
+(1 real change made)
+
+. replace year = 1973 in `=_N-1'
+(1 real change made)
+
+. replace year = 1974 in `=_N-2'
+(1 real change made)
+
+. replace year = 1975 in `=_N-3'
+(1 real change made)
+
+. replace type = "total" in `=_N'
+(1 real change made)
+
+. replace type = "total" in `=_N-1'
+(1 real change made)
+
+. replace type = "total" in `=_N-2'
+(1 real change made)
+
+. replace type = "total" in `=_N-3'
+(1 real change made)
+
+. fillin type year
+
+. drop _fillin
+
+. egen typegroup = group(type)
+
+. format year %ty
+
+. xtset typegroup year
+       panel variable:  typegroup (strongly balanced)
+        time variable:  year, 1948 to 2018, but with gaps
+                delta:  1 year
+
+. lab var year "Year"
+
+. 
+. twoway (line rate year if type=="total"                       , cmissing(y) l
+> pattern(_)     lcolor(black) ) ///
+>        (line rate year if type=="same county"                 , cmissing(y) l
+> pattern(.)     lcolor(black) ) ///
+>        (line rate year if type=="different county"            , cmissing(y) l
+> pattern(-)     lcolor(black) ) ///
+>        (line rate year if type=="different county same state" , cmissing(y) l
+> pattern("-.-") lcolor(black) ) ///
+>        (line rate year if type=="different state"             , cmissing(y) l
+> pattern("_._") lcolor(black) ), ///
+>        legend(label(1 "Total") label(2 "Same County") label(3 "Diff County") 
+> label(4 "Diff County, Same State") label(5 "Diff County, Diff State") cols(2)
+> ) ytitle("Annual Migration Rate (%)") xscale(range(1945(5)2020)) graphregion(
+> color(white))
+
+. graph export ${graphpath}LongRunMigrationRates.eps, replace
+(file ../graphics/LongRunMigrationRates.eps written in EPS format)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/mobilityGraphs.log
+  log type:  text
+ closed on:  15 Jun 2020, 08:42:33
+-------------------------------------------------------------------------------

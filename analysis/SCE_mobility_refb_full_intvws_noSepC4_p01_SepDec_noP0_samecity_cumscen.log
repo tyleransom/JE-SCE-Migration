@@ -1,0 +1,951 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/SCE_mobility_refb_full
+> _intvws_noSepC4_p01_SepDec_noP0_samecity_cumscen.log
+  log type:  text
+ opened on:  16 Jun 2020, 06:21:54
+
+. 
+. use ${temppath}alldata_refb_full_intvws_noSepC4_p01_SepDec_noP0_samecity, cle
+> ar
+
+. 
+. *----------------------------------------------------------------------------
+> --
+. * create cumulative scenario variable and format time stamp data
+. *----------------------------------------------------------------------------
+> --
+. /*
+> tempfile september
+> preserve
+>     use "${datapath}SCE_Sep_public.dta", clear
+>     keep scuid scenord_?
+>     forval x=1/6 {
+>         forval y=1/4 {
+>             gen scenord_`x'_`y' = scenord_`x'
+>         }
+>         drop scenord_`x'
+>     }
+>     reshape long scenord_1_ scenord_2_ scenord_3_ scenord_4_ scenord_5_ sceno
+> rd_6_, i(scuid) j(scennum)
+>     forval x=1/6 {
+>         ren scenord_`x'_ scenord_`x'
+>     }
+>     reshape long scenord_ , i(scuid scennum) j(case)
+>     ren scenord_ scenario_order
+>     sort scuid case scennum
+>     l in 1/30, sepby(scuid)
+>     save `september', replace
+> restore
+> */
+. 
+. tempfile december
+
+. preserve
+
+.     use "${datapath}SCE_Dec_public.dta", clear
+
+.     keep scuid qmvt_?? scenord_?
+
+.     forval x=1/6 {
+  2.         forval y=1/4 {
+  3.             ren qmvt_`x'`y' qmvt_`x'_`y'
+  4.             gen scenord_`x'_`y' = scenord_`x'
+  5.         }
+  6.         drop scenord_`x'
+  7.     }
+(536 missing values generated)
+(536 missing values generated)
+(536 missing values generated)
+(536 missing values generated)
+(536 missing values generated)
+(536 missing values generated)
+(536 missing values generated)
+(536 missing values generated)
+(535 missing values generated)
+(535 missing values generated)
+(535 missing values generated)
+(535 missing values generated)
+(22 missing values generated)
+(22 missing values generated)
+(22 missing values generated)
+(22 missing values generated)
+(535 missing values generated)
+(535 missing values generated)
+(535 missing values generated)
+(535 missing values generated)
+(22 missing values generated)
+(22 missing values generated)
+(22 missing values generated)
+(22 missing values generated)
+
+.     reshape long qmvt_1_ qmvt_2_ qmvt_3_ qmvt_4_ qmvt_5_ qmvt_6_ scenord_1_ s
+> cenord_2_ scenord_3_ scenord_4_ scenord_5_ scenord_6_, i(scuid) j(scennum)
+(note: j = 1 2 3 4)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                     1049   ->    4196
+Number of variables                  49   ->      14
+j variable (4 values)                     ->   scennum
+xij variables:
+         qmvt_1_1 qmvt_1_2 ... qmvt_1_4   ->   qmvt_1_
+         qmvt_2_1 qmvt_2_2 ... qmvt_2_4   ->   qmvt_2_
+         qmvt_3_1 qmvt_3_2 ... qmvt_3_4   ->   qmvt_3_
+         qmvt_4_1 qmvt_4_2 ... qmvt_4_4   ->   qmvt_4_
+         qmvt_5_1 qmvt_5_2 ... qmvt_5_4   ->   qmvt_5_
+         qmvt_6_1 qmvt_6_2 ... qmvt_6_4   ->   qmvt_6_
+scenord_1_1 scenord_1_2 ... scenord_1_4   ->   scenord_1_
+scenord_2_1 scenord_2_2 ... scenord_2_4   ->   scenord_2_
+scenord_3_1 scenord_3_2 ... scenord_3_4   ->   scenord_3_
+scenord_4_1 scenord_4_2 ... scenord_4_4   ->   scenord_4_
+scenord_5_1 scenord_5_2 ... scenord_5_4   ->   scenord_5_
+scenord_6_1 scenord_6_2 ... scenord_6_4   ->   scenord_6_
+-----------------------------------------------------------------------------
+
+.     forval x=1/6 {
+  2.         ren qmvt_`x'_ qmvt_`x'
+  3.         ren scenord_`x'_ scenord_`x'
+  4.     }
+
+.     reshape long qmvt_ scenord_ , i(scuid scennum) j(case)
+(note: j = 1 2 3 4 5 6)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                     4196   ->   25176
+Number of variables                  14   ->       5
+j variable (6 values)                     ->   case
+xij variables:
+               qmvt_1 qmvt_2 ... qmvt_6   ->   qmvt_
+      scenord_1 scenord_2 ... scenord_6   ->   scenord_
+-----------------------------------------------------------------------------
+
+.     ren qmvt_ timespentans
+
+.     ren scenord_ scenario_order
+
+.     sort scuid case scennum
+
+.     l in 1/30, sepby(scuid)
+
+     +-----------------------------------------------+
+     |  scuid   scennum   case   timesp~s   scenar~r |
+     |-----------------------------------------------|
+  1. | 127011         1      1          .          . |
+  2. | 127011         2      1          .          . |
+  3. | 127011         3      1          .          . |
+  4. | 127011         4      1          .          . |
+  5. | 127011         1      2          .          . |
+  6. | 127011         2      2          .          . |
+  7. | 127011         3      2          .          . |
+  8. | 127011         4      2          .          . |
+  9. | 127011         1      3        112          3 |
+ 10. | 127011         2      3         56          3 |
+ 11. | 127011         3      3         30          3 |
+ 12. | 127011         4      3         50          3 |
+ 13. | 127011         1      4         78          4 |
+ 14. | 127011         2      4         36          4 |
+ 15. | 127011         3      4         45          4 |
+ 16. | 127011         4      4         48          4 |
+ 17. | 127011         1      5        252          1 |
+ 18. | 127011         2      5         57          1 |
+ 19. | 127011         3      5         40          1 |
+ 20. | 127011         4      5         35          1 |
+ 21. | 127011         1      6         84          2 |
+ 22. | 127011         2      6         50          2 |
+ 23. | 127011         3      6         29          2 |
+ 24. | 127011         4      6         94          2 |
+     |-----------------------------------------------|
+ 25. | 201107         1      1         16          3 |
+ 26. | 201107         2      1         13          3 |
+ 27. | 201107         3      1         20          3 |
+ 28. | 201107         4      1         19          3 |
+ 29. | 201107         1      2         65          1 |
+ 30. | 201107         2      2         23          1 |
+     +-----------------------------------------------+
+
+.     save `december', replace
+(note: file /home/data/tmp/St30162.00029l not found)
+file /home/data/tmp/St30162.00029l saved
+
+. restore
+
+. 
+. /*
+> tempfile both
+> preserve
+>     use `september', clear
+>     append using `december', gen(wave) force
+>     recode wave (1=2) (0=1)
+>     save `both'
+> restore
+> */
+. 
+. gen casestr = substr(svyblk,-1,.)
+
+. destring casestr, gen(case)
+casestr: all characters numeric; case generated as byte
+
+. 
+. *merge m:1 scuid case scennum using `both', keep(match master) nogen
+. merge m:1 scuid case scennum using `december', keep(match master) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        27,384
+        from master                    27,384  
+        from using                          0  
+
+    matched                            28,224  
+    -----------------------------------------
+
+. 
+. gen cumscen = 4*(scenario_order-1)+scennum
+(27,384 missing values generated)
+
+. preserve
+
+.     drop if wave==1
+(27,384 observations deleted)
+
+.     l scuid case scennum scenario_order cumscen in 1/30, sepby(scuid)
+
+     +----------------------------------------------+
+     |  scuid   case   scennum   scenar~r   cumscen |
+     |----------------------------------------------|
+  1. | 127011      3         1          3         9 |
+  2. | 127011      3         1          3         9 |
+  3. | 127011      3         2          3        10 |
+  4. | 127011      3         2          3        10 |
+  5. | 127011      3         3          3        11 |
+  6. | 127011      3         3          3        11 |
+  7. | 127011      3         4          3        12 |
+  8. | 127011      3         4          3        12 |
+  9. | 127011      4         1          4        13 |
+ 10. | 127011      4         1          4        13 |
+ 11. | 127011      4         2          4        14 |
+ 12. | 127011      4         2          4        14 |
+ 13. | 127011      4         3          4        15 |
+ 14. | 127011      4         3          4        15 |
+ 15. | 127011      4         4          4        16 |
+ 16. | 127011      4         4          4        16 |
+ 17. | 127011      5         1          1         1 |
+ 18. | 127011      5         1          1         1 |
+ 19. | 127011      5         2          1         2 |
+ 20. | 127011      5         2          1         2 |
+ 21. | 127011      5         3          1         3 |
+ 22. | 127011      5         3          1         3 |
+ 23. | 127011      5         4          1         4 |
+ 24. | 127011      5         4          1         4 |
+ 25. | 127011      6         1          2         5 |
+ 26. | 127011      6         1          2         5 |
+ 27. | 127011      6         2          2         6 |
+ 28. | 127011      6         2          2         6 |
+ 29. | 127011      6         3          2         7 |
+ 30. | 127011      6         3          2         7 |
+     +----------------------------------------------+
+
+. restore
+
+. 
+. drop if wave==1
+(27,384 observations deleted)
+
+. *----------------------------------------------------------------------------
+> --
+. * Are people taking shorter or longer to answer the questions as the survey p
+> rogresses?
+. *----------------------------------------------------------------------------
+> --
+. preserve 
+
+.     * remove unneeded obs
+.     drop if wave<2
+(0 observations deleted)
+
+.     drop if altnum==3
+(14,112 observations deleted)
+
+.     ** sequentialize case numbers
+.     *egen min_case = min(case), by(scuid)
+.     *gen seq_case = case
+.     *replace seq_case = 1 if case==1 & min_case==1
+.     *replace seq_case = 2 if case==2 & min_case==1
+.     *replace seq_case = 3 if case==4 & min_case==1
+.     *replace seq_case = 4 if case==6 & min_case==1
+.     *replace seq_case = 1 if case==3 & min_case==3
+.     *replace seq_case = 2 if case==4 & min_case==3
+.     *replace seq_case = 3 if case==5 & min_case==3
+.     *replace seq_case = 4 if case==6 & min_case==3
+. 
+.     * cross-tabs
+.     tab scenario_order if scennum==1, sum(timespentans)
+
+scenario_or |       Summary of timespentans
+        der |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+          1 |   148.70408   572.76721         882
+          2 |    83.79932   377.27911         882
+          3 |   92.159864   594.56488         882
+          4 |   53.791383   106.13918         882
+------------+------------------------------------
+      Total |   94.613662   458.03408       3,528
+
+.     tab scenario_order if scennum==2, sum(timespentans)
+
+scenario_or |       Summary of timespentans
+        der |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+          1 |   38.914966   48.103448         882
+          2 |   31.248299   43.672585         882
+          3 |     31.3322    75.16959         882
+          4 |   1182.5828   34300.581         882
+------------+------------------------------------
+      Total |   321.01956   17150.285       3,528
+
+.     tab scenario_order if scennum==3, sum(timespentans)
+
+scenario_or |       Summary of timespentans
+        der |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+          1 |   30.791383   24.190354         882
+          2 |   28.544218   51.617149         882
+          3 |   1236.0578   35949.912         882
+          4 |   26.340136     32.6211         882
+------------+------------------------------------
+      Total |   330.43339   17974.948       3,528
+
+.     tab scenario_order if scennum==4, sum(timespentans)
+
+scenario_or |       Summary of timespentans
+        der |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+          1 |    30.53288   37.564044         882
+          2 |   43.656463   509.43527         882
+          3 |     26.1678   40.548078         882
+          4 |   904.84694   26119.628         882
+------------+------------------------------------
+      Total |   251.30102   13062.224       3,528
+
+. 
+.     * medians
+.     table scenario_order if scennum==1, c(p50 timespentans)
+
+-------------------------
+scenario_ |
+order     | med(timesp~s)
+----------+--------------
+        1 |            95
+        2 |            49
+        3 |            38
+        4 |            36
+-------------------------
+
+.     table scenario_order if scennum==2, c(p50 timespentans)
+
+-------------------------
+scenario_ |
+order     | med(timesp~s)
+----------+--------------
+        1 |            30
+        2 |            23
+        3 |            20
+        4 |            20
+-------------------------
+
+.     table scenario_order if scennum==3, c(p50 timespentans)
+
+-------------------------
+scenario_ |
+order     | med(timesp~s)
+----------+--------------
+        1 |            25
+        2 |            20
+        3 |            19
+        4 |            19
+-------------------------
+
+.     table scenario_order if scennum==4, c(p50 timespentans)
+
+-------------------------
+scenario_ |
+order     | med(timesp~s)
+----------+--------------
+        1 |            23
+        2 |            20
+        3 |            19
+        4 |            19
+-------------------------
+
+. 
+.     * regression models
+.     reg timespentans i.scenario_order i.scennum
+
+      Source |       SS           df       MS      Number of obs   =    14,112
+-------------+----------------------------------   F(6, 14105)     =      0.62
+       Model |   729222611         6   121537102   Prob > F        =    0.7170
+    Residual |  2.7789e+12    14,105   197014753   R-squared       =    0.0003
+-------------+----------------------------------   Adj R-squared   =   -0.0002
+       Total |  2.7796e+12    14,111   196982660   Root MSE        =     14036
+
+------------------------------------------------------------------------------
+timespentans |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+scenario_o~r |
+          2  |  -15.42375   334.1951    -0.05   0.963    -670.4903    639.6428
+          3  |   284.1936   334.1951     0.85   0.395     -370.873    939.2602
+          4  |   479.6545   334.1951     1.44   0.151    -175.4121    1134.721
+             |
+     scennum |
+          2  |   226.4059   334.1951     0.68   0.498    -428.6607    881.4725
+          3  |   235.8197   334.1951     0.71   0.480    -419.2469    890.8863
+          4  |   156.6874   334.1951     0.47   0.639    -498.3792    811.7539
+             |
+       _cons |  -92.49242   312.6109    -0.30   0.767    -705.2511    520.2663
+------------------------------------------------------------------------------
+
+.     reg timespentans c.scenario_order i.scennum
+
+      Source |       SS           df       MS      Number of obs   =    14,112
+-------------+----------------------------------   F(4, 14107)     =      0.84
+       Model |   658999844         4   164749961   Prob > F        =    0.5018
+    Residual |  2.7790e+12    14,107   196991799   R-squared       =    0.0002
+-------------+----------------------------------   Adj R-squared   =   -0.0000
+       Total |  2.7796e+12    14,111   196982660   Root MSE        =     14035
+
+------------------------------------------------------------------------------
+timespentans |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+scenario_o~r |   173.8581   105.6756     1.65   0.100    -33.28009    380.9962
+             |
+     scennum |
+          2  |   226.4059   334.1756     0.68   0.498    -428.6225    881.4343
+          3  |   235.8197   334.1756     0.71   0.480    -419.2087    890.8481
+          4  |   156.6874   334.1756     0.47   0.639    -498.3411    811.7158
+             |
+       _cons |  -340.0315   354.4468    -0.96   0.337    -1034.794     354.731
+------------------------------------------------------------------------------
+
+.     reg timespentans c.scenario_order c.scennum
+
+      Source |       SS           df       MS      Number of obs   =    14,112
+-------------+----------------------------------   F(2, 14109)     =      1.46
+       Model |   573751634         2   286875817   Prob > F        =    0.2331
+    Residual |  2.7790e+12    14,109   196969917   R-squared       =    0.0002
+-------------+----------------------------------   Adj R-squared   =    0.0001
+       Total |  2.7796e+12    14,111   196982660   Root MSE        =     14035
+
+------------------------------------------------------------------------------
+timespentans |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+scenario_o~r |   173.8581   105.6697     1.65   0.100    -33.26859    380.9847
+     scennum |   47.94759   105.6697     0.45   0.650    -159.1791    255.0743
+       _cons |  -305.1723   391.8339    -0.78   0.436    -1073.218     462.874
+------------------------------------------------------------------------------
+
+. 
+.     * regression models
+.     qreg timespentans i.scenario_order i.scennum
+Iteration  1:  WLS sum of weighted deviations =  1756764.3
+
+Iteration  1: sum of abs. weighted deviations =  1756912.5
+note:  alternate solutions exist
+Iteration  2: sum of abs. weighted deviations =  1690931.5
+note:  alternate solutions exist
+Iteration  3: sum of abs. weighted deviations =  1679437.5
+note:  alternate solutions exist
+Iteration  4: sum of abs. weighted deviations =  1668332.5
+note:  alternate solutions exist
+Iteration  5: sum of abs. weighted deviations =  1661920.5
+note:  alternate solutions exist
+Iteration  6: sum of abs. weighted deviations =  1658016.5
+note:  alternate solutions exist
+Iteration  7: sum of abs. weighted deviations =  1657066.5
+note:  alternate solutions exist
+Iteration  8: sum of abs. weighted deviations =  1653028.5
+note:  alternate solutions exist
+Iteration  9: sum of abs. weighted deviations =  1651675.5
+note:  alternate solutions exist
+Iteration 10: sum of abs. weighted deviations =  1643179.5
+note:  alternate solutions exist
+Iteration 11: sum of abs. weighted deviations =  1641315.5
+note:  alternate solutions exist
+Iteration 12: sum of abs. weighted deviations =  1640699.5
+note:  alternate solutions exist
+Iteration 13: sum of abs. weighted deviations =  1639800.5
+note:  alternate solutions exist
+Iteration 14: sum of abs. weighted deviations =  1639642.5
+note:  alternate solutions exist
+Iteration 15: sum of abs. weighted deviations =  1639630.5
+note:  alternate solutions exist
+Iteration 16: sum of abs. weighted deviations =  1639480.5
+note:  alternate solutions exist
+Iteration 17: sum of abs. weighted deviations =  1639357.5
+note:  alternate solutions exist
+Iteration 18: sum of abs. weighted deviations =  1639357.5
+note:  alternate solutions exist
+Iteration 19: sum of abs. weighted deviations =  1639357.5
+note:  alternate solutions exist
+Iteration 20: sum of abs. weighted deviations =  1639345.5
+note:  alternate solutions exist
+Iteration 21: sum of abs. weighted deviations =  1639337.5
+note:  alternate solutions exist
+Iteration 22: sum of abs. weighted deviations =  1639337.5
+note:  alternate solutions exist
+Iteration 23: sum of abs. weighted deviations =  1639337.5
+note:  alternate solutions exist
+Iteration 24: sum of abs. weighted deviations =  1639337.5
+note:  alternate solutions exist
+Iteration 25: sum of abs. weighted deviations =  1639337.5
+note:  alternate solutions exist
+Iteration 26: sum of abs. weighted deviations =  1639323.5
+note:  alternate solutions exist
+Iteration 27: sum of abs. weighted deviations =  1639323.5
+note:  alternate solutions exist
+Iteration 28: sum of abs. weighted deviations =  1639323.5
+note:  alternate solutions exist
+Iteration 29: sum of abs. weighted deviations =  1639323.5
+note:  alternate solutions exist
+Iteration 30: sum of abs. weighted deviations =  1639323.5
+note:  alternate solutions exist
+Iteration 31: sum of abs. weighted deviations =  1639323.5
+note:  alternate solutions exist
+Iteration 32: sum of abs. weighted deviations =  1639323.5
+note:  alternate solutions exist
+Iteration 33: sum of abs. weighted deviations =  1639323.5
+note:  alternate solutions exist
+Iteration 34: sum of abs. weighted deviations =  1639323.5
+
+Median regression                                   Number of obs =     14,112
+  Raw sum of deviations  1656557 (about 25)
+  Min sum of deviations  1639324                    Pseudo R2     =     0.0104
+
+------------------------------------------------------------------------------
+timespentans |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+scenario_o~r |
+          2  |         -9    .629226   -14.30   0.000    -10.23337   -7.766634
+          3  |        -11    .629226   -17.48   0.000    -12.23337   -9.766634
+          4  |        -12    .629226   -19.07   0.000    -13.23337   -10.76663
+             |
+     scennum |
+          2  |        -29    .629226   -46.09   0.000    -30.23337   -27.76663
+          3  |        -31    .629226   -49.27   0.000    -32.23337   -29.76663
+          4  |        -32    .629226   -50.86   0.000    -33.23337   -30.76663
+             |
+       _cons |         60    .588587   101.94   0.000     58.84629    61.15371
+------------------------------------------------------------------------------
+
+.     qui outreg2 using ${tablepath}QtimeQreg.tex, replace se bdec(1) sdec(1) t
+> ex(frag) ctitle("December")
+ : 
+.     !sed -i "s|VARIABLES|Characteristic|ig" "${tablepath}QtimeQreg.tex"
+
+
+.     !sed -i "s|2\.scenario\\\_order|2nd block|ig" "${tablepath}QtimeQreg.tex"
+
+
+.     !sed -i "s|3\.scenario\\\_order|3rd block|ig" "${tablepath}QtimeQreg.tex"
+
+
+.     !sed -i "s|4\.scenario\\\_order|4th block|ig" "${tablepath}QtimeQreg.tex"
+
+
+.     !sed -i "s|seq\\\_case|Block trend|ig" "${tablepath}QtimeQreg.tex"
+
+
+.     !sed -i "s|2\.scennum|2nd scenario|ig" "${tablepath}QtimeQreg.tex"
+
+
+.     !sed -i "s|3\.scennum|3rd scenario|ig" "${tablepath}QtimeQreg.tex"
+
+
+.     !sed -i "s|4\.scennum|4th scenario|ig" "${tablepath}QtimeQreg.tex"
+
+
+.     !sed -i "s|scennum|Scenario trend|ig" "${tablepath}QtimeQreg.tex"
+
+
+.     * remove rows that talk about statistical significance or standard errors
+.     !sed -i '/multicolumn/d' ${tablepath}QtimeQreg.tex
+
+
+. restore
+
+. 
+. *----------------------------------------------------------------------------
+> --
+. * Estimate location attribute models with cumulative scenario trend
+. *----------------------------------------------------------------------------
+> --
+. global Suffix = "RefBFullIntvwsNoSepC4p01SepDecNoP0SameCityCSbswtp"
+
+. 
+. * estimate group-level models including cumulative scenario trends
+. local  scenarios income homecost crime dist family size mvcost taxes norms sc
+> hqual withincitymove copyhome moved cumscen c.moved#c.cumscen
+
+. global Suffix = "RefBFullIntvwsNoSepC4p01SepDecNoP0SameCityCSbswtp"
+
+. 
+. include groupestimation_samecity_inclDec_newWTP_CS_bswtp
+
+. 
+. xtset scuid
+       panel variable:  scuid (balanced)
+
+. preserve
+
+. * now estimate for various subpopulations
+. 
+. local  scenarios income homecost crime dist family size mvcost taxes norms sc
+> hqual withincitymove copyhome moved
+
+. set seed 1001
+
+. bootstrap, cluster(scuid) reps(${nreps}): qreg ratio `scenarios'
+(running qreg on estimation sample)
+
+Bootstrap replications (1000)
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+..................................................  1000
+
+Median regression                                   Number of obs =     28,224
+  Raw sum of deviations  45194.1 (about 0)
+  Min sum of deviations  40734.8                    Pseudo R2     =     0.0987
+
+                                 (Replications based on 882 clusters in scuid)
+------------------------------------------------------------------------------
+             |   Observed   Bootstrap                         Normal-based
+       ratio |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      income |   5.011534    .606737     8.26   0.000     3.822351    6.200716
+    homecost |  -.9541742   .3385432    -2.82   0.005    -1.617707   -.2906418
+       crime |   -.854246   .1065979    -8.01   0.000    -1.063174    -.645318
+        dist |  -.0951016   .0168637    -5.64   0.000    -.1281538   -.0620495
+      family |   3.458092    .500645     6.91   0.000     2.476846    4.439338
+        size |          0  (omitted)
+      mvcost |          0  (omitted)
+       taxes |          0  (omitted)
+       norms |   .2058526   .0265606     7.75   0.000     .1537947    .2579104
+     schqual |   .2036884   .0854666     2.38   0.017     .0361769    .3711998
+withincity~e |   2.718492   .4128333     6.58   0.000     1.909353     3.52763
+    copyhome |   .6898316    .249621     2.76   0.006     .2005834     1.17908
+       moved |  -4.230761    .612942    -6.90   0.000    -5.432105   -3.029417
+       _cons |   .0638031   .0437796     1.46   0.145    -.0220032    .1496095
+------------------------------------------------------------------------------
+
+. est sto all
+
+. qui outreg2 using ${tablepath}model2Est${Suffix}.tex, replace  se bdec(3) sde
+> c(3) tex(frag)
+ : 
+. 
+. local  scenarios income homecost crime dist family size mvcost taxes norms sc
+> hqual withincitymove copyhome moved cumscen c.moved#c.cumscen
+
+. set seed 1001
+
+. bootstrap, cluster(scuid) reps(${nreps}): qreg ratio `scenarios'
+(running qreg on estimation sample)
+
+Bootstrap replications (1000)
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+..................................................  1000
+
+Median regression                                   Number of obs =     28,224
+  Raw sum of deviations  45194.1 (about 0)
+  Min sum of deviations 40712.63                    Pseudo R2     =     0.0992
+
+                                 (Replications based on 882 clusters in scuid)
+------------------------------------------------------------------------------
+             |   Observed   Bootstrap                         Normal-based
+       ratio |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      income |    4.98619   .5511222     9.05   0.000      3.90601    6.066369
+    homecost |  -.9536711   .3385956    -2.82   0.005    -1.617306    -.290036
+       crime |   -.849926   .0958369    -8.87   0.000    -1.037763   -.6620892
+        dist |  -.0947224   .0162464    -5.83   0.000    -.1265648     -.06288
+      family |   3.270135   .4589427     7.13   0.000     2.370624    4.169646
+        size |          0  (omitted)
+      mvcost |          0  (omitted)
+       taxes |          0  (omitted)
+       norms |   .2048115    .024545     8.34   0.000     .1567042    .2529189
+     schqual |   .2038004   .0854443     2.39   0.017     .0363326    .3712682
+withincity~e |   2.693513   .3830689     7.03   0.000     1.942711    3.444314
+    copyhome |   .6990967   .2307898     3.03   0.002      .246757    1.151436
+       moved |  -3.692356   .6066083    -6.09   0.000    -4.881286   -2.503425
+     cumscen |  -4.44e-16   1.75e-16    -2.54   0.011    -7.86e-16   -1.02e-16
+             |
+     c.moved#|
+   c.cumscen |  -.0638532   .0270814    -2.36   0.018    -.1169318   -.0107746
+             |
+       _cons |   .0639889   .0447583     1.43   0.153    -.0237357    .1517134
+------------------------------------------------------------------------------
+
+. est sto cumulative
+
+. qui outreg2 using ${tablepath}model2Est${Suffix}.tex, append   se bdec(3) sde
+> c(3) tex(frag)
+ : 
+. set seed 1001
+
+. *bootstrap homecost_wtp = (-(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*${med
+> inc}) crime_wtp = (-(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*${medinc}) dist_wt
+> p = (-(exp(-_b[dist]/_b[income])-1)*${medinc}) family_wtp = (-(exp(-_b[family
+> ]/_b[income])-1)*${medinc}) size_wtp = (-(exp(-_b[size]/_b[income])-1)*${medi
+> nc}) mvcost_wtp = (-(exp(-_b[mvcost]/_b[income]*5)-1)*${medinc}) taxes_wtp = 
+> (-(exp(-_b[taxes]/_b[income]*5)-1)*${medinc}) norms_wtp = (-(exp(-_b[norms]/_
+> b[income])-1)*${medinc}) schqual_wtp = (-(exp(-_b[schqual]/_b[income])-1)*${m
+> edinc}) withincity_wtp = (-(exp(-_b[withincitymove]/_b[income])-1)*${medinc})
+>  copyhome_wtp = (-(exp(-_b[copyhome]/_b[income])-1)*${medinc}) moved_wtp = (-
+> (exp(-_b[moved]/_b[income])-1)*${medinc}), cluster(scuid) reps(${nreps}): qre
+> g ratio `scenarios'
+. *qui outreg2 using ${tablepath}model2WTPincome${Suffix}.tex, replace  se bdec
+> (0) sdec(0) tex(frag) ctitle("all") 
+. *set seed 1001
+. *bootstrap homecost_wtp = (-(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*100) 
+> crime_wtp = (-(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*100) dist_wtp = (-(exp(-
+> _b[dist]/_b[income])-1)*100) family_wtp = (-(exp(-_b[family]/_b[income])-1)*1
+> 00) size_wtp = (-(exp(-_b[size]/_b[income])-1)*100) mvcost_wtp = (-(exp(-_b[m
+> vcost]/_b[income]*5)-1)*100) taxes_wtp = (-(exp(-_b[taxes]/_b[income]*5)-1)*1
+> 00) norms_wtp = (-(exp(-_b[norms]/_b[income])-1)*100) schqual_wtp = (-(exp(-_
+> b[schqual]/_b[income])-1)*100) withincity_wtp = (-(exp(-_b[withincitymove]/_b
+> [income])-1)*100) copyhome_wtp = (-(exp(-_b[copyhome]/_b[income])-1)*100) mov
+> ed_wtp = (-(exp(-_b[moved]/_b[income])-1)*100), cluster(scuid) reps(${nreps})
+> : qreg ratio `scenarios'
+. *qui outreg2 using ${tablepath}model2WTPincomePct${Suffix}.tex, replace  se b
+> dec(2) sdec(2) tex(frag) ctitle("all") 
+. 
+. est table all cumulative , b(%9.3f) stats(N) star keep(`scenarios') title("Es
+> timates of migration tastes across various subpopulations")
+
+Estimates of migration tastes across various subpopulations
+
+--------------------------------------------
+    Variable |     all         cumulative   
+-------------+------------------------------
+      income |     5.012***       4.986***  
+    homecost |    -0.954**       -0.954**   
+       crime |    -0.854***      -0.850***  
+        dist |    -0.095***      -0.095***  
+      family |     3.458***       3.270***  
+        size | (omitted)      (omitted)     
+      mvcost | (omitted)      (omitted)     
+       taxes | (omitted)      (omitted)     
+       norms |     0.206***       0.205***  
+     schqual |     0.204*         0.204*    
+withincity~e |     2.718***       2.694***  
+    copyhome |     0.690**        0.699**   
+       moved |    -4.231***      -3.692***  
+     cumscen |                   -0.000*    
+             |
+     c.moved#|
+   c.cumscen |                   -0.064*    
+-------------+------------------------------
+           N |     28224          28224     
+--------------------------------------------
+    legend: * p<0.05; ** p<0.01; *** p<0.001
+
+. restore
+
+. 
+. ******* Clean up tex files
+. * change VARIABLES notation (default for outreg2)
+. !sed -i "s|3\.altnum|Alternative 3 dummy|ig"   "${tablepath}model2Est${Suffix
+> }.tex"
+
+
+. !sed -i "s|VARIABLES|Characteristic|ig" "${tablepath}model2Est${Suffix}.tex"
+
+
+. *!sed -i "s|VARIABLES|Characteristic|ig" "${tablepath}model2WTPincome${Suffix
+> }.tex"
+. *!sed -i "s|VARIABLES|Characteristic|ig" "${tablepath}model2WTPincomePct${Suf
+> fix}.tex"
+. 
+. !sed -i "s|income|Income|ig" "${tablepath}model2Est${Suffix}.tex"
+
+
+. *!sed -i "s|income|Income|ig" "${tablepath}model2WTPincome${Suffix}.tex"
+. *!sed -i "s|income|Income|ig" "${tablepath}model2WTPincomePct${Suffix}.tex"
+. 
+. !sed -i "s|homecost|Housing costs|ig"     "${tablepath}model2Est${Suffix}.tex
+> "
+
+
+. *!sed -i "s|homecost\\\_wtp|Housing costs|ig" "${tablepath}model2WTPincome${S
+> uffix}.tex"
+. *!sed -i "s|homecost\\\_wtp|Housing costs|ig" "${tablepath}model2WTPincomePct
+> ${Suffix}.tex"
+. 
+. !sed -i "s|crime|Crime|ig"     "${tablepath}model2Est${Suffix}.tex"
+
+
+. *!sed -i "s|crime\\\_wtp|Crime|ig" "${tablepath}model2WTPincome${Suffix}.tex"
+. *!sed -i "s|crime\\\_wtp|Crime|ig" "${tablepath}model2WTPincomePct${Suffix}.t
+> ex"
+. 
+. !sed -i "s|dist|Distance|ig"     "${tablepath}model2Est${Suffix}.tex"
+
+
+. *!sed -i "s|dist\\\_wtp|Distance|ig" "${tablepath}model2WTPincome${Suffix}.te
+> x"
+. *!sed -i "s|dist\\\_wtp|Distance|ig" "${tablepath}model2WTPincomePct${Suffix}
+> .tex"
+. 
+. !sed -i "s|family|Family nearby|ig"     "${tablepath}model2Est${Suffix}.tex"
+
+
+. *!sed -i "s|family\\\_wtp|Family nearby|ig" "${tablepath}model2WTPincome${Suf
+> fix}.tex"
+. *!sed -i "s|family\\\_wtp|Family nearby|ig" "${tablepath}model2WTPincomePct${
+> Suffix}.tex"
+. 
+. !sed -i "s|size|House square footage|ig"     "${tablepath}model2Est${Suffix}.
+> tex"
+
+
+. *!sed -i "s|size\\\_wtp|House square footage|ig" "${tablepath}model2WTPincome
+> ${Suffix}.tex"
+. *!sed -i "s|size\\\_wtp|House square footage|ig" "${tablepath}model2WTPincome
+> Pct${Suffix}.tex"
+. 
+. !sed -i "s|mvcost|Financial moving costs|ig"     "${tablepath}model2Est${Suff
+> ix}.tex"
+
+
+. *!sed -i "s|mvcost\\\_wtp|Financial moving costs|ig" "${tablepath}model2WTPin
+> come${Suffix}.tex"
+. *!sed -i "s|mvcost\\\_wtp|Financial moving costs|ig" "${tablepath}model2WTPin
+> comePct${Suffix}.tex"
+. 
+. !sed -i "s|taxes|Taxes|ig"     "${tablepath}model2Est${Suffix}.tex"
+
+
+. *!sed -i "s|taxes\\\_wtp|Taxes|ig" "${tablepath}model2WTPincome${Suffix}.tex"
+. *!sed -i "s|taxes\\\_wtp|Taxes|ig" "${tablepath}model2WTPincomePct${Suffix}.t
+> ex"
+. 
+. !sed -i "s|norms|Local cultural norms|ig"     "${tablepath}model2Est${Suffix}
+> .tex"
+
+
+. *!sed -i "s|norms\\\_wtp|Local cultural norms|ig" "${tablepath}model2WTPincom
+> e${Suffix}.tex"
+. *!sed -i "s|norms\\\_wtp|Local cultural norms|ig" "${tablepath}model2WTPincom
+> ePct${Suffix}.tex"
+. 
+. !sed -i "s|copyhome|Exact copy of current home|ig"     "${tablepath}model2Est
+> ${Suffix}.tex"
+
+
+. *!sed -i "s|copyhome\\\_wtp|Exact copy of current home|ig" "${tablepath}model
+> 2WTPincome${Suffix}.tex"
+. *!sed -i "s|copyhome\\\_wtp|Exact copy of current home|ig" "${tablepath}model
+> 2WTPincomePct${Suffix}.tex"
+. 
+. !sed -i "s|schqual|Local school quality|ig"     "${tablepath}model2Est${Suffi
+> x}.tex"
+
+
+. *!sed -i "s|schqual\\\_wtp|Local school quality|ig" "${tablepath}model2WTPinc
+> ome${Suffix}.tex"
+. *!sed -i "s|schqual\\\_wtp|Local school quality|ig" "${tablepath}model2WTPinc
+> omePct${Suffix}.tex"
+. 
+. !sed -i "s|withincitymove|Local move|ig"     "${tablepath}model2Est${Suffix}.
+> tex"
+
+
+. *!sed -i "s|withincity\\\_wtp|Move within school district|ig" "${tablepath}mo
+> del2WTPincome${Suffix}.tex"
+. *!sed -i "s|withincity\\\_wtp|Move within school district|ig" "${tablepath}mo
+> del2WTPincomePct${Suffix}.tex"
+. 
+. !sed -i "s|moved|Nonpecuniary moving costs|ig"     "${tablepath}model2Est${Su
+> ffix}.tex"
+
+
+. *!sed -i "s|moved\\\_wtp|Nonpecuniary moving costs|ig" "${tablepath}model2WTP
+> income${Suffix}.tex"
+. *!sed -i "s|moved\\\_wtp|Nonpecuniary moving costs|ig" "${tablepath}model2WTP
+> incomePct${Suffix}.tex"
+. 
+. !sed -i "s|c\.||ig"     "${tablepath}model2Est${Suffix}.tex"
+
+
+. !sed -i "s|\\\#| `=char(36)'\\\times`=char(36)' |ig"     "${tablepath}model2E
+> st${Suffix}.tex"
+
+
+. *!sed -i "s|cumscen\\\_wtp|Nonpecuniary moving costs|ig" "${tablepath}model2W
+> TPincome${Suffix}.tex"
+. *!sed -i "s|cumscen\\\_wtp|Nonpecuniary moving costs|ig" "${tablepath}model2W
+> TPincomePct${Suffix}.tex"
+. 
+. !sed -i "s|cumscen|Cumulative scenario|ig"     "${tablepath}model2Est${Suffix
+> }.tex"
+
+
+. *!sed -i "s|cumscen\\\_wtp|Nonpecuniary moving costs|ig" "${tablepath}model2W
+> TPincome${Suffix}.tex"
+. *!sed -i "s|cumscen\\\_wtp|Nonpecuniary moving costs|ig" "${tablepath}model2W
+> TPincomePct${Suffix}.tex"
+. 
+. 
+. * remove rows that talk about statistical significance or standard errors
+. !sed -i '/multicolumn/d' ${tablepath}model2Est${Suffix}.tex
+
+
+. *!sed -i '/multicolumn/d' ${tablepath}model2WTPincome${Suffix}.tex
+. *!sed -i '/multicolumn/d' ${tablepath}model2WTPincomePct${Suffix}.tex
+. 
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/SCE_mobility_refb_full
+> _intvws_noSepC4_p01_SepDec_noP0_samecity_cumscen.log
+  log type:  text
+ closed on:  16 Jun 2020, 07:31:27
+-------------------------------------------------------------------------------

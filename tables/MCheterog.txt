@@ -1,0 +1,23 @@
+	(1)	(2)	(3)
+VARIABLES	Non-monetary moving cost	Non-monetary moving cost	Non-monetary moving cost
+			
+1.ownhome	-14,831***	-11,591**	1,537
+	(4,689)	(5,417)	(3,679)
+agenew		-348**	-326***
+		(168)	(124)
+2.qmv12			4,671
+			(3,614)
+3.qmv12			-47,449***
+			(4,760)
+1.grad4yr	-6,338	-8,326**	-4,311
+	(4,408)	(4,177)	(3,325)
+1.empFT	4,121	1,408	-457
+	(4,309)	(4,631)	(3,689)
+1.hasyouth_in_home	-2,227	-5,949	-5,601
+	(4,907)	(4,882)	(3,849)
+Constant	-19,256***	-1,190	2,821
+	(4,296)	(8,599)	(7,327)
+			
+Observations	1,340	1,340	1,340
+Standard errors in parentheses			
+*** p<0.01, ** p<0.05, * p<0.1			

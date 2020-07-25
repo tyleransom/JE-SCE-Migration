@@ -1,0 +1,201 @@
+﻿year,reason,rate
+1999,marital status,6.5
+2000,marital status,6.1
+2001,marital status,6.0
+2002,marital status,6.1
+2003,marital status,6.7
+2004,marital status,6.2
+2005,marital status,7.1
+2006,marital status,6.0
+2007,marital status,5.9
+2008,marital status,5.7
+2009,marital status,5.4
+2010,marital status,7.3
+2011,marital status,5.6
+2012,marital status,6.3
+2013,marital status,5.1
+2014,marital status,4.9
+2015,marital status,5.8
+2016,marital status,4.8
+2017,marital status,5.1
+2018,marital status,4.4
+1999,establish HH,7.7
+2000,establish HH,7.2
+2001,establish HH,7.5
+2002,establish HH,7.6
+2003,establish HH,7.0
+2004,establish HH,7.0
+2005,establish HH,7.8
+2006,establish HH,8.5
+2007,establish HH,9.8
+2008,establish HH,10.5
+2009,establish HH,9.5
+2010,establish HH,11.2
+2011,establish HH,9.5
+2012,establish HH,10.7
+2013,establish HH,10.5
+2014,establish HH,11.1
+2015,establish HH,11.0
+2016,establish HH,12.2
+2017,establish HH,11.5
+2018,establish HH,12.6
+1999,other family reason,11.6
+2000,other family reason,13.3
+2001,other family reason,13.7
+2002,other family reason,12.0
+2003,other family reason,12.6
+2004,other family reason,11.2
+2005,other family reason,12.2
+2006,other family reason,13.2
+2007,other family reason,14.4
+2008,other family reason,14.4
+2009,other family reason,11.5
+2010,other family reason,11.7
+2011,other family reason,12.8
+2012,other family reason,12.3
+2013,other family reason,14.8
+2014,other family reason,13.4
+2015,other family reason,14.3
+2016,other family reason,10.5
+2017,other family reason,11.3
+2018,other family reason,11.1
+1999,new job transfer,9.5
+2000,new job transfer,10.4
+2001,new job transfer,10.3
+2002,new job transfer,10.5
+2003,new job transfer,8.8
+2004,new job transfer,9.2
+2005,new job transfer,10.4
+2006,new job transfer,8.7
+2007,new job transfer,9.8
+2008,new job transfer,8.4
+2009,new job transfer,8.7
+2010,new job transfer,7.8
+2011,new job transfer,8.1
+2012,new job transfer,9.5
+2013,new job transfer,9.0
+2014,new job transfer,9.7
+2015,new job transfer,10.6
+2016,new job transfer,10.8
+2017,new job transfer,9.9
+2018,new job transfer,10.3
+1999,commute,3.1
+2000,commute,3.4
+2001,commute,3.1
+2002,commute,3.0
+2003,commute,3.2
+2004,commute,3.7
+2005,commute,3.4
+2006,commute,3.6
+2007,commute,4.8
+2008,commute,6.2
+2009,commute,5.0
+2010,commute,4.2
+2011,commute,5.9
+2012,commute,5.5
+2013,commute,5.4
+2014,commute,6.2
+2015,commute,4.9
+2016,commute,6.0
+2017,commute,5.5
+2018,commute,5.6
+1999,want own,7.8
+2000,want own,11.0
+2001,want own,10.1
+2002,want own,10.5
+2003,want own,10.2
+2004,want own,9.3
+2005,want own,9.3
+2006,want own,8.6
+2007,want own,5.9
+2008,want own,5.8
+2009,want own,5.5
+2010,want own,4.6
+2011,want own,4.4
+2012,want own,4.7
+2013,want own,5.8
+2014,want own,5.6
+2015,want own,5.3
+2016,want own,5.9
+2017,want own,7.3
+2018,want own,7.3
+1999,want better,20.8
+2000,want better,17.8
+2001,want better,17.6
+2002,want better,18.8
+2003,want better,19.8
+2004,want better,21.1
+2005,want better,17.8
+2006,want better,17.8
+2007,want better,15.8
+2008,want better,13.8
+2009,want better,14.5
+2010,want better,15.5
+2011,want better,16.2
+2012,want better,15.9
+2013,want better,14.8
+2014,want better,15.8
+2015,want better,15.3
+2016,want better,17.4
+2017,want better,16.0
+2018,want better,16.4
+1999,want better neighborhood,3.9
+2000,want better neighborhood,4.3
+2001,want better neighborhood,3.9
+2002,want better neighborhood,4.0
+2003,want better neighborhood,3.8
+2004,want better neighborhood,4.7
+2005,want better neighborhood,4.0
+2006,want better neighborhood,4.4
+2007,want better neighborhood,5.5
+2008,want better neighborhood,5.1
+2009,want better neighborhood,5.0
+2010,want better neighborhood,4.1
+2011,want better neighborhood,3.9
+2012,want better neighborhood,3.4
+2013,want better neighborhood,3.2
+2014,want better neighborhood,3.0
+2015,want better neighborhood,2.9
+2016,want better neighborhood,3.1
+2017,want better neighborhood,2.8
+2018,want better neighborhood,2.6
+1999,cheaper housing,6.0
+2000,cheaper housing,5.3
+2001,cheaper housing,5.5
+2002,cheaper housing,5.9
+2003,cheaper housing,6.5
+2004,cheaper housing,7.3
+2005,cheaper housing,6.6
+2006,cheaper housing,6.2
+2007,cheaper housing,8.0
+2008,cheaper housing,8.2
+2009,cheaper housing,11.1
+2010,cheaper housing,10.8
+2011,cheaper housing,10.5
+2012,cheaper housing,8.9
+2013,cheaper housing,8.3
+2014,cheaper housing,9.4
+2015,cheaper housing,7.5
+2016,cheaper housing,8.2
+2017,cheaper housing,8.3
+2018,cheaper housing,7.9
+1999,other housing reason,11.1
+2000,other housing reason,11.2
+2001,other housing reason,10.8
+2002,other housing reason,10.4
+2003,other housing reason,11.0
+2004,other housing reason,10.3
+2005,other housing reason,9.4
+2006,other housing reason,9.2
+2007,other housing reason,6.8
+2008,other housing reason,7.2
+2009,other housing reason,9.7
+2010,other housing reason,8.7
+2011,other housing reason,8.8
+2012,other housing reason,14.4
+2013,other housing reason,14.0
+2014,other housing reason,12.8
+2015,other housing reason,14.4
+2016,other housing reason,6.7
+2017,other housing reason,7.6
+2018,other housing reason,6.7

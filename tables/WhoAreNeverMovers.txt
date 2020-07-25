@@ -1,0 +1,50 @@
+	(1)
+VARIABLES	Full Sample
+	
+total_svy_time	-0.000
+	(0.000)
+1.long_svy_time	-0.047**
+	(0.024)
+1.short_svy_time	0.199***
+	(0.050)
+2.qmv12	0.071***
+	(0.021)
+3.qmv12	0.146***
+	(0.013)
+agenew	0.003***
+	(0.001)
+1.female	0.016
+	(0.014)
+1.white	-0.024
+	(0.017)
+1.grad4yr	-0.012
+	(0.015)
+1.married	-0.026*
+	(0.016)
+1.haskids_in_home	0.006
+	(0.015)
+1.healthy	0.008
+	(0.015)
+2.residence	-0.018
+	(0.018)
+3.residence	0.007
+	(0.020)
+1.empFT	0.005
+	(0.016)
+1.ownhome	-0.021
+	(0.017)
+risky1	0.013
+	(0.024)
+risky2	0.009
+	(0.021)
+confused_inflation	0.031
+	(0.023)
+confused_risk	0.008
+	(0.029)
+Constant	-0.107**
+	(0.043)
+	
+Observations	2,101
+R-squared	0.091
+Robust standard errors in parentheses	
+*** p<0.01, ** p<0.05, * p<0.1	

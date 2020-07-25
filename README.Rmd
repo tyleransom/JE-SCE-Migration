@@ -1,0 +1,173 @@
+---
+title: "Replication Guide"
+author: "Gizem Koşar, Tyler Ransom, Wilbert van der Klaauw"
+output: word_document
+---
+
+To replicate all results, simply run the file `analysis/master.do`. Details below: 
+
+# Detailed steps for replication:
+
+Our public-use data does not directly reveal detailed geographic information, but does incorporate information on locational attributes such as tax rates, crime rates, and home values at the ZIP code or county levels. We obtained data on tax rates at the ZIP code level from the Internal Revenue Service [here](https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-statistics-2017-zip-code-data-soi). The home value (per square foot) data is at the ZIP code leve and comes from [Zillow](https://www.zillow.com/research/data/) as of January 2018. Violent crime rates are at the county level and come from the County Health Ratings 2019 Analytic Data [here](https://www.countyhealthrankings.org/sites/default/files/media/document/analytic_data2019.csv). 
+
+
+## 1. Create mobility graph
+ * Figure 1
+ 
+ * code: `analysis/mobilityGraphs.do`
+ * dependency: 
+     * `${datapath}moveRates.csv` (adapted from information at https://www.census.gov/data/tables/time-series/demo/geographic-mobility/historic.html)
+ * output: (in graphics folder)
+     * `LongRunMigrationRates.eps`
+
+## 2. Create descriptive results reported
+ * Tables 3, 4
+ 
+ * code: `SCE_descriptives_Jan.do`
+ * dependencies: 
+     * January data file (`${datapath}SCE_Jan_public.dta`)
+     * `datacleaning_Jan.do`
+     * `descriptives_Jan.do`
+ * outputs: (in tables folder)
+     * `ReasonsNotMove.tex`
+     * `ReasonsToMove.tex`
+
+## 3. Create descriptive tables and figures comparing SCE with ACS, as well as information on SCE samples
+ * Tables 1-2, Appendix Tables A1-A2 (scenarios per person for full sample and movers), A3-A4 (who are the never-movers), Appendix Figures A1, A4, A5
+
+ * code: `SCE_descriptives_SepDec.do`
+ * dependencies: 
+     * September data (`${datapath}SCE_Sep_public.dta`)
+     * December data (`${datapath}SCE_Dec_public.dta`)
+     * unique IDs (`${datapath}UniqueIDsSepDec.dta`)
+     * `datacleaning_SepDec.do`
+     * `descriptives_SepDec.do`
+     * `${datapath}UniqueIDsSepDec.dta` (list of individual identifiers to be used in later estimation)
+     * ACS data (`${datapath}ACS/acs2017.dta.gz`)
+     * literacy/numeracy questions (`${datapath}model_output_ids_merged_with_core_data.dta`)
+ * outputs: (in tables or graphics folder)
+     * graphics
+         * `p*Sep.eps`, `p*Dec.eps`, etc. (histograms of choice probabilities)
+         * `nm*.eps` (histograms of percent of scenarios where pr move = 0)
+     * tables
+         * `DistnScenPerPerson*.tex` (Scenarios per person for full sample and ever-movers)
+         * `SampleDescriptivesSepDec.tex` (compare SCE and ACS)
+         * `RootedDescriptivesSepDec.tex` (who are mobile/stuck/rooted?)
+         * `NeverMoverDescriptiveTable.tex` (mean differences between ever- and never-movers)
+         * `WhoAreNeverMovers.tex` (LPM of never-mover on demographics, numeracy, literacy, etc.)
+
+## 4. Population-level estimates
+ * Tables 5, 6, 7
+ 
+ * code: `SCE_mobility_refb_full_intvws_noSepC4_p01_SepDec_noP0_samecity.do`
+ * dependencies: 
+     * September data (`${datapath}SCE_Sep_public.dta`)
+     * December data (`${datapath}SCE_Dec_public.dta`)
+     * `datacleaning_SepDec.do`
+     * `createchoicedata_p2_0_1_samecity_SepDec.do`
+     * `groupestimation_samecity_inclDec_newWTP_bswtp.do`
+ * outputs: (in tables folder)
+     * model2EstRefBFullIntvwsNoSepC4p01SepDecNoP0SameCitybswtp.tex
+     * model2WTPincomeRefBFullIntvwsNoSepC4p01SepDecNoP0SameCitybswtp.tex
+     * model2WTPincomePctRefBFullIntvwsNoSepC4p01SepDecNoP0SameCitybswtp.tex
+
+## 5. Create Appendix Tables which include multinomial logit and rank-ordered logit WTPs and estimates includes never-movers
+ * Appendix Tables A7, A9, A10, A11 (Note: Table A7 is not exactly reproducible due to ties in the subjective probabilities being randomly broken)
+ * code for 2nd and 3rd columns: `SCE_mobility_refb_full_intvws_noSepC4_mlrologit_SepDec_noP0_samecity.do`
+ * dependencies: 
+     * September data (`${datapath}SCE_Sep_public.dta`)
+     * December data (`${datapath}SCE_Dec_public.dta`)
+     * `datacleaning_SepDec.do`
+     * `createchoicedata_mlogit_samecity_SepDec.do`
+     * `groupestimation_mlrologit_samecity_inclDec_newWTP.do`
+ * outputs: (in tables folder)
+     * `model2WTPincomePctRefBFullIntvwsNoSepC4MLROLSepDecNP0SameCity.tex`
+
+ * code for 1st column: `include SCE_mobility_refb_full_intvws_noSepC4_p01_SepDec_samecity.do`
+ * dependencies: 
+     * September data (`${datapath}SCE_Sep_public.dta`)
+     * December data (`${datapath}SCE_Dec_public.dta`)
+     * `datacleaning_SepDec.do`
+     * `createchoicedata_p2_0_1_samecity_SepDec.do`
+     * `groupestimation_samecity_inclDec_newWTP_bswtp.do`
+ * outputs: (in tables folder)
+     * `model2EstRefBFullIntvwsNoSepC4p01SepDecSameCitybswtp.tex`
+     * `model2WTPincomeRefBFullIntvwsNoSepC4p01SepDecSameCitybswtp.tex`
+     * `model2WTPincomePctRefBFullIntvwsNoSepC4p01SepDecSameCitybswtp.tex`
+
+## 6. Individual-level estimation
+ * output data is later used for Item 7.
+ 
+ * code: `SCE_mobility_refb_full_intvws_noSepC4_p01_SepDec_indiv.do`
+ * dependencies: 
+     * September data (`${datapath}SCE_Sep_public.dta`)
+     * December data (`${datapath}SCE_Dec_public.dta`)
+     * `datacleaning_SepDec.do`
+     * `createchoicedata_p2_0_1_samecity_SepDec.do`
+     * `indivestimation_inclDec.do`
+ * outputs: (in temp folder)
+     * `${temppath}individual_level_neighborhood_refb_full_intvws_no_sepC4_p01_SepDec_indiv.dta` (individual-level estimates)
+
+## 7. Preference heterogeneity analysis
+ * Figure 4, Appendix Figure A2, Tables 8, 9, 10, Appendix Tables A5, A6, A8, A12
+ * code: `lookAtIndivWTPs.do`
+ * dependencies: (these are all data sets)
+     * `${temppath}alldata_refb_full_intvws_noSepC4_p01_SepDec_samecity` (cleaned data from estimation including never-movers)
+     * `${temppath}individual_level_neighborhood_refb_full_intvws_no_sepC4_p01_SepDec_indiv.dta` (individual-level estimates)
+     * literacy/numeracy questions (`${datapath}model_output_ids_merged_with_core_data.dta`)
+ * outputs: (figures and tables)
+     * graphics
+         * `histo_*.eps` (histograms of WTP for each attribute)
+     * tables
+         * `WhoAreZeroUndefInc.tex` (LPM of zero or undefined income coefficient on individual characteristics)
+         * `BadBetaIncDescriptiveTable.tex` (difference in means between those having valid and invalid income coeffs)
+         * `Sorting1.tex` (comparison of WTP by level of attribute already chosen)
+         * `WTPdemogs1.tex` (comparison of WTP by demographic characteristics)
+         * `MCheterog.tex` (heterogeneity in moving costs by moving state variables)
+         * `DistnBetas.tex` (distribution of individual Preference Parameters)
+         * `WTPfracDemogs1.tex` (comparison of WTP as percentage of income by demographic characteristics)
+
+## 8. Analysis of relationship between stated and actual choices
+ * Figures 5, 6, Appendix Figure A3
+ * code: `prepare_data_for_binscatters.do`
+ * dependencies: (these are all data sets)
+     * `${datapath}sce_fullpanel_mobility.dta` (data about mobility and mobility expectations from the entirety of the SCE panel)
+     * `${datapath}dec19_experiment_respondents_move_prob.dta` (data from the December 2019 experimental respondents with their most recent core data on mobility expectations merged in)
+     * `${temppath}individual_level_neighborhood_refb_full_intvws_no_sepC4_p01_SepDec_indiv.dta` (individual-level estimates)
+ * outputs (also data sets):
+     * `${temppath}model_output.dta`
+     * `${temppath}sept_respondents_with_model_estimates.dta`
+
+ * doe: `make_binscatters.do`
+ * dependencies: (these are all data sets)
+     * `${datapath}sce_fullpanel_mobility.dta` (data about mobility and mobility expectations from the entirety of the SCE panel)
+     * `${datapath}dec19_experiment_respondents_move_prob.dta` (data from the December 2019 experimental respondents with their most recent core data on mobility expectations merged in)
+     * `${temppath}individual_level_neighborhood_refb_full_intvws_no_sepC4_p01_SepDec_indiv.dta` (individual-level estimates)
+     * `${temppath}model_output.dta`
+     * `${temppath}sept_respondents_with_model_estimates.dta`
+ * outputs: (graphics)
+     * `${graphpath}mobility_expectations_actual_mobility_fullcore_final.eps`
+     * `${graphpath}mobility_expectations_actual_mobility_sept_final.eps`
+     * `${graphpath}mobility_expectations_wtp.eps`
+
+## 9. Robustness checks
+ * __Question response time and response quality__
+ * Appendix Table 16
+ 
+ * code: `SCE_mobility_refb_full_intvws_noSepC4_p01_SepDec_noP0_samecity_cumscen.do`
+ * dependencies:
+     * December data
+ * output: (in tables folder)
+     * `QtimeQreg.tex`
+
+ * __Estimates separately for the employed and non-employed__
+ * Appendix Tables 13, 14, 15
+ 
+ * code: `include SCE_mobility_refb_full_intvws_noSepC4_p01_SepDec_noP0_samecity_ENE.do`
+ * dependencies:
+     * `${temppath}alldata_refb_full_intvws_noSepC4_p01_SepDec_noP0_samecity.dta` (data created in main group-level estimation file above)
+     * `groupestimation_samecity_inclDec_newWTP_ENE_bswtp.do`
+ * outputs: (in tables folder)
+     * `model2EstRefBFullIntvwsNoSepC4p01SepDecNoP0SameCityENEbswtp.tex`
+     * `model2WTPincomeRefBFullIntvwsNoSepC4p01SepDecNoP0SameCityENEbswtp.tex`
+     * `model2WTPincomePctRefBFullIntvwsNoSepC4p01SepDecNoP0SameCityENEbswtp.tex`

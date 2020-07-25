@@ -1,0 +1,1438 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/SCE_descriptives_Jan.l
+> og
+  log type:  text
+ opened on:  15 Jun 2020, 08:42:33
+
+. 
+. use "${datapath}SCE_Jan_public", clear
+
+. 
+. *----------------------------------------------------------------------------
+> --
+. * Data cleaning
+. *----------------------------------------------------------------------------
+> --
+. include datacleaning_Jan
+
+. * only use repeat respondents  
+. drop if respondent !=2
+(181 observations deleted)
+
+. 
+. * drop those missing demographics
+. drop if mi(q33) | mi(qmv12)
+(13 observations deleted)
+
+. 
+. * Reasons to stay/move
+. lab def vlimport 1 "Not at all important" 2 "A little important" 3 "Somewhat 
+> important" 4 "Very important" 5 "Extremely important"
+
+. * qmv10= reasons for not moving
+. lab var qmv10_1  "Stay: Like current home" 
+
+. lab var qmv10_2  "Stay: Can't afford cost of moving" 
+
+. lab var qmv10_3  "Stay: Can't afford to buy home in places I want to move to"
+>  
+
+. lab var qmv10_4  "Stay: Difficult to find a new place to move into" 
+
+. lab var qmv10_5  "Stay: Current mortgage is underwater" 
+
+. lab var qmv10_6  "Stay: Current interest rate very low" 
+
+. lab var qmv10_7  "Stay: Difficult to qualify for new mortgage" 
+
+. lab var qmv10_8  "Stay: Like current job" 
+
+. lab var qmv10_9  "Stay: Hard to find job elsewhere" 
+
+. lab var qmv10_10 "Stay: Hard for spouse to find job elsewhere"
+
+. lab var qmv10_11 "Stay: Not licensed to work in other states" 
+
+. lab var qmv10_12 "Stay: Work experience would be less valuable elsewhere" 
+
+. lab var qmv10_13 "Stay: May lose Medicaid coverage" 
+
+. lab var qmv10_14 "Stay: May lose UI / other welfare benefits" 
+
+. lab var qmv10_15 "Stay: Financially dependent on local network (family, frien
+> ds, church, etc.)" 
+
+. lab var qmv10_16 "Stay: Too much student debt" 
+
+. lab var qmv10_17 "Stay: Too much other debts / haven't saved enough" 
+
+. lab var qmv10_18 "Stay: Health reasons" 
+
+. lab var qmv10_19 "Stay: Children in school" 
+
+. lab var qmv10_20 "Stay: Good quality local schools" 
+
+. lab var qmv10_21 "Stay: Close to family / children" 
+
+. lab var qmv10_22 "Stay: Like current neighborhood / climate" 
+
+. lab var qmv10_23 "Stay: Involved in local community / church / share local va
+> lues"
+
+. lab var qmv10_24 "Stay: Worry about high crime rates elsewhere" 
+
+. lab val qmv10_1  vlimport  
+
+. lab val qmv10_2  vlimport  
+
+. lab val qmv10_3  vlimport  
+
+. lab val qmv10_4  vlimport  
+
+. lab val qmv10_5  vlimport 
+
+. lab val qmv10_6  vlimport 
+
+. lab val qmv10_7  vlimport 
+
+. lab val qmv10_8  vlimport 
+
+. lab val qmv10_9  vlimport 
+
+. lab val qmv10_10 vlimport  
+
+. lab val qmv10_11 vlimport 
+
+. lab val qmv10_12 vlimport 
+
+. lab val qmv10_13 vlimport 
+
+. lab val qmv10_14 vlimport 
+
+. lab val qmv10_15 vlimport 
+
+. lab val qmv10_16 vlimport 
+
+. lab val qmv10_17 vlimport 
+
+. lab val qmv10_18 vlimport 
+
+. lab val qmv10_19 vlimport 
+
+. lab val qmv10_20 vlimport 
+
+. lab val qmv10_21 vlimport 
+
+. lab val qmv10_22 vlimport 
+
+. lab val qmv10_23 vlimport 
+
+. lab val qmv10_24 vlimport 
+
+. sum qmv10_1  [w=rim_4_original],d 
+(analytic weights assumed)
+
+                   Stay: Like current home
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            2              1       Obs               1,147
+25%            3              1       Sum of Wgt.   1,127.151
+
+50%            4                      Mean           3.989106
+                        Largest       Std. Dev.      1.187854
+75%            5              5
+90%            5              5       Variance       1.410998
+95%            5              5       Skewness      -1.123881
+99%            5              5       Kurtosis       3.393657
+
+. sum qmv10_2  [w=rim_4_original],d
+(analytic weights assumed)
+
+              Stay: Can't afford cost of moving
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,147
+25%            1              1       Sum of Wgt.   1,127.371
+
+50%            3                      Mean           2.857545
+                        Largest       Std. Dev.      1.452556
+75%            4              5
+90%            5              5       Variance       2.109919
+95%            5              5       Skewness       .0580718
+99%            5              5       Kurtosis       1.635388
+
+. sum qmv10_3  [w=rim_4_original],d
+(analytic weights assumed)
+
+     Stay: Can't afford to buy home in places I want to
+                           move to
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,126.818
+
+50%            3                      Mean            3.10966
+                        Largest       Std. Dev.      1.528796
+75%            4              5
+90%            5              5       Variance       2.337217
+95%            5              5       Skewness      -.2114574
+99%            5              5       Kurtosis       1.552095
+
+. sum qmv10_4  [w=rim_4_original],d
+(analytic weights assumed)
+
+      Stay: Difficult to find a new place to move into
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,144
+25%            1              1       Sum of Wgt.    1,125.26
+
+50%            3                      Mean           2.678037
+                        Largest       Std. Dev.       1.39317
+75%            4              5
+90%            5              5       Variance       1.940923
+95%            5              5       Skewness       .1334051
+99%            5              5       Kurtosis       1.692184
+
+. sum qmv10_5  [w=rim_4_original],d
+(analytic weights assumed)
+
+            Stay: Current mortgage is underwater
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,147
+25%            1              1       Sum of Wgt.   1,127.371
+
+50%            2                      Mean           2.362839
+                        Largest       Std. Dev.      1.496319
+75%            4              5
+90%            5              5       Variance       2.238972
+95%            5              5       Skewness       .5276951
+99%            5              5       Kurtosis       1.730914
+
+. sum qmv10_6  [w=rim_4_original],d
+(analytic weights assumed)
+
+            Stay: Current interest rate very low
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,147
+25%            1              1       Sum of Wgt.   1,127.371
+
+50%            1                      Mean           2.082689
+                        Largest       Std. Dev.      1.393833
+75%            3              5
+90%            4              5       Variance        1.94277
+95%            5              5       Skewness       .8551208
+99%            5              5       Kurtosis       2.259881
+
+. sum qmv10_7  [w=rim_4_original],d
+(analytic weights assumed)
+
+         Stay: Difficult to qualify for new mortgage
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,147
+25%            1              1       Sum of Wgt.   1,127.371
+
+50%            1                      Mean           2.001221
+                        Largest       Std. Dev.      1.393331
+75%            3              5
+90%            4              5       Variance        1.94137
+95%            5              5       Skewness       1.047776
+99%            5              5       Kurtosis       2.618369
+
+. sum qmv10_8  [w=rim_4_original],d
+(analytic weights assumed)
+
+                   Stay: Like current job
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,143
+25%            1              1       Sum of Wgt.   1,123.124
+
+50%            2                      Mean           2.595352
+                        Largest       Std. Dev.      1.593124
+75%            4              5
+90%            5              5       Variance       2.538043
+95%            5              5       Skewness       .3190124
+99%            5              5       Kurtosis       1.487721
+
+. sum qmv10_9  [w=rim_4_original],d
+(analytic weights assumed)
+
+              Stay: Hard to find job elsewhere
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,144
+25%            1              1       Sum of Wgt.   1,123.523
+
+50%            2                      Mean           2.217065
+                        Largest       Std. Dev.      1.408021
+75%            3              5
+90%            4              5       Variance       1.982524
+95%            5              5       Skewness       .7043315
+99%            5              5       Kurtosis       2.057866
+
+. sum qmv10_10 [w=rim_4_original],d // TR: this one has tons of missing values 
+> because it was conditional on being married
+(analytic weights assumed)
+
+         Stay: Hard for spouse to find job elsewhere
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs                 721
+25%            1              1       Sum of Wgt.  723.031001
+
+50%            1                      Mean           2.137027
+                        Largest       Std. Dev.      1.404873
+75%            3              5
+90%            4              5       Variance        1.97367
+95%            5              5       Skewness       .8214409
+99%            5              5       Kurtosis       2.218785
+
+. sum qmv10_11 [w=rim_4_original],d
+(analytic weights assumed)
+
+         Stay: Not licensed to work in other states
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,143
+25%            1              1       Sum of Wgt.   1,122.863
+
+50%            1                      Mean           1.469045
+                        Largest       Std. Dev.      1.063608
+75%            1              5
+90%            3              5       Variance       1.131261
+95%            4              5       Skewness       2.249907
+99%            5              5       Kurtosis       6.880195
+
+. sum qmv10_12 [w=rim_4_original],d
+(analytic weights assumed)
+
+        Stay: Work experience would be less valuable
+                          elsewhere
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.373
+
+50%            1                      Mean           1.725975
+                        Largest       Std. Dev.      1.172876
+75%            2              5
+90%            4              5       Variance       1.375638
+95%            4              5       Skewness       1.435707
+99%            5              5       Kurtosis       3.830655
+
+. sum qmv10_13 [w=rim_4_original],d
+(analytic weights assumed)
+
+              Stay: May lose Medicaid coverage
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,144
+25%            1              1       Sum of Wgt.   1,123.682
+
+50%            1                      Mean           1.625531
+                        Largest       Std. Dev.      1.247303
+75%            1              5
+90%            4              5       Variance       1.555764
+95%            5              5       Skewness        1.77906
+99%            5              5       Kurtosis       4.653316
+
+. sum qmv10_14 [w=rim_4_original],d
+(analytic weights assumed)
+
+         Stay: May lose UI / other welfare benefits
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.373
+
+50%            1                      Mean            1.43072
+                        Largest       Std. Dev.      1.022963
+75%            1              5
+90%            3              5       Variance       1.046454
+95%            4              5       Skewness       2.361726
+99%            5              5       Kurtosis       7.433986
+
+. sum qmv10_15 [w=rim_4_original],d
+(analytic weights assumed)
+
+        Stay: Financially dependent on local network
+               (family, friends, church, etc.)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,144
+25%            1              1       Sum of Wgt.   1,121.085
+
+50%            1                      Mean           1.655095
+                        Largest       Std. Dev.      1.172747
+75%            2              5
+90%            4              5       Variance       1.375336
+95%            4              5       Skewness       1.656377
+99%            5              5       Kurtosis       4.483246
+
+. sum qmv10_16 [w=rim_4_original],d
+(analytic weights assumed)
+
+                 Stay: Too much student debt
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,141
+25%            1              1       Sum of Wgt.   1,116.791
+
+50%            1                      Mean           1.370402
+                        Largest       Std. Dev.      .9464652
+75%            1              5
+90%            3              5       Variance       .8957965
+95%            4              5       Skewness       2.596706
+99%            5              5       Kurtosis       8.711556
+
+. sum qmv10_17 [w=rim_4_original],d
+(analytic weights assumed)
+
+      Stay: Too much other debts / haven't saved enough
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,144
+25%            1              1       Sum of Wgt.   1,121.085
+
+50%            1                      Mean           1.943372
+                        Largest       Std. Dev.      1.354951
+75%            3              5
+90%            4              5       Variance       1.835892
+95%            5              5       Skewness       1.111504
+99%            5              5       Kurtosis       2.781537
+
+. sum qmv10_18 [w=rim_4_original],d
+(analytic weights assumed)
+
+                    Stay: Health reasons
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.373
+
+50%            1                      Mean            1.77678
+                        Largest       Std. Dev.       1.22093
+75%            3              5
+90%            4              5       Variance       1.490669
+95%            5              5       Skewness       1.370508
+99%            5              5       Kurtosis       3.628383
+
+. sum qmv10_19 [w=rim_4_original],d
+(analytic weights assumed)
+
+                  Stay: Children in school
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.373
+
+50%            1                      Mean           1.869264
+                        Largest       Std. Dev.      1.468161
+75%            3              5
+90%            5              5       Variance       2.155496
+95%            5              5       Skewness       1.287255
+99%            5              5       Kurtosis       2.938254
+
+. sum qmv10_20 [w=rim_4_original],d
+(analytic weights assumed)
+
+              Stay: Good quality local schools
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.373
+
+50%            1                      Mean           1.957999
+                        Largest       Std. Dev.      1.475347
+75%            3              5
+90%            5              5       Variance       2.176649
+95%            5              5       Skewness       1.124593
+99%            5              5       Kurtosis       2.601128
+
+. sum qmv10_21 [w=rim_4_original],d
+(analytic weights assumed)
+
+              Stay: Close to family / children
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,124.831
+
+50%            3                      Mean           3.046642
+                        Largest       Std. Dev.      1.574242
+75%            4              5
+90%            5              5       Variance       2.478238
+95%            5              5       Skewness      -.1506422
+99%            5              5       Kurtosis       1.482744
+
+. sum qmv10_22 [w=rim_4_original],d
+(analytic weights assumed)
+
+          Stay: Like current neighborhood / climate
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            2              1       Sum of Wgt.   1,126.136
+
+50%            4                      Mean           3.339033
+                        Largest       Std. Dev.      1.389312
+75%            4              5
+90%            5              5       Variance       1.930188
+95%            5              5       Skewness      -.4398615
+99%            5              5       Kurtosis       1.964872
+
+. sum qmv10_23 [w=rim_4_original],d
+(analytic weights assumed)
+
+     Stay: Involved in local community / church / share
+                        local values
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,144
+25%            1              1       Sum of Wgt.   1,123.628
+
+50%            2                      Mean           2.190822
+                        Largest       Std. Dev.      1.400528
+75%            3              5
+90%            4              5       Variance       1.961477
+95%            5              5       Skewness       .7653656
+99%            5              5       Kurtosis       2.180985
+
+. sum qmv10_24 [w=rim_4_original],d
+(analytic weights assumed)
+
+        Stay: Worry about high crime rates elsewhere
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.373
+
+50%            3                      Mean           2.591845
+                        Largest       Std. Dev.      1.463072
+75%            4              5
+90%            5              5       Variance       2.140579
+95%            5              5       Skewness        .299547
+99%            5              5       Kurtosis       1.676077
+
+. 
+. * qmv11= reasons for moving
+. lab var qmv11_1  "Move: Expect to be evicted"
+
+. lab var qmv11_2  "Move: Don't like current home"
+
+. lab var qmv11_3  "Move: Upgrade to larger/better home"
+
+. lab var qmv11_4  "Move: Reduce housing costs"
+
+. lab var qmv11_5  "Move: Change ownership status (either direction)"
+
+. lab var qmv11_6  "Move: New job/job transfer"
+
+. lab var qmv11_7  "Move: New job/job transfer of spouse/partner"
+
+. lab var qmv11_8  "Move: Attend an educational institution"
+
+. lab var qmv11_9  "Move: Reduce commuting"
+
+. lab var qmv11_10 "Move: Look for a job"
+
+. lab var qmv11_11 "Move: Work experience would be more valuable elsewhere"
+
+. lab var qmv11_12 "Move: May gain Medicaid coverage"
+
+. lab var qmv11_13 "Move: May gain UI / other welfare benefits" 
+
+. lab var qmv11_14 "Move: Change in household / family size (any reason)"
+
+. lab var qmv11_15 "Move: Crowding, conflict, or violence in the household"
+
+. lab var qmv11_16 "Move: Health reasons"
+
+. lab var qmv11_17 "Move: Too much student debt"
+
+. lab var qmv11_18 "Move: Too much other debts"
+
+. lab var qmv11_19 "Move: Want to be closer to family / friends (any reason)"
+
+. lab var qmv11_20 "Move: Want more desirable neighborhood / climate"
+
+. lab var qmv11_21 "Move: Want a safer neighborhood"
+
+. lab var qmv11_22 "Move: Want better schools"
+
+. lab var qmv11_23 "Move: Want better access to public transportation"
+
+. lab var qmv11_24 "Move: Want access to public services (libraries, playground
+> s, etc.)"
+
+. lab var qmv11_25 "Move: Want better access to amenities (restaurants, theater
+> s, shopping, etc.)"
+
+. lab var qmv11_26 "Move: Cultural values in other places are too different"
+
+. lab val qmv11_1  vlimport
+
+. lab val qmv11_2  vlimport
+
+. lab val qmv11_3  vlimport
+
+. lab val qmv11_4  vlimport
+
+. lab val qmv11_5  vlimport
+
+. lab val qmv11_6  vlimport
+
+. lab val qmv11_7  vlimport
+
+. lab val qmv11_8  vlimport
+
+. lab val qmv11_9  vlimport
+
+. lab val qmv11_10 vlimport
+
+. lab val qmv11_11 vlimport
+
+. lab val qmv11_12 vlimport
+
+. lab val qmv11_13 vlimport
+
+. lab val qmv11_14 vlimport
+
+. lab val qmv11_15 vlimport
+
+. lab val qmv11_16 vlimport
+
+. lab val qmv11_17 vlimport
+
+. lab val qmv11_18 vlimport
+
+. lab val qmv11_19 vlimport
+
+. lab val qmv11_20 vlimport
+
+. lab val qmv11_21 vlimport
+
+. lab val qmv11_22 vlimport
+
+. lab val qmv11_23 vlimport
+
+. lab val qmv11_24 vlimport
+
+. lab val qmv11_25 vlimport
+
+. lab val qmv11_26 vlimport
+
+. sum qmv11_1  [w=rim_4_original],d
+(analytic weights assumed)
+
+                 Move: Expect to be evicted
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,147
+25%            1              1       Sum of Wgt.   1,127.643
+
+50%            1                      Mean           1.432243
+                        Largest       Std. Dev.      1.045107
+75%            1              5
+90%            3              5       Variance        1.09225
+95%            4              5       Skewness       2.380573
+99%            5              5       Kurtosis       7.427861
+
+. sum qmv11_2  [w=rim_4_original],d
+(analytic weights assumed)
+
+                Move: Don't like current home
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.414
+
+50%            1                      Mean           1.887166
+                        Largest       Std. Dev.      1.334941
+75%            3              5
+90%            4              5       Variance       1.782068
+95%            5              5       Skewness       1.208867
+99%            5              5       Kurtosis       3.016178
+
+. sum qmv11_3  [w=rim_4_original],d
+(analytic weights assumed)
+
+             Move: Upgrade to larger/better home
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,125.103
+
+50%            2                      Mean           2.373337
+                        Largest       Std. Dev.      1.459594
+75%            4              5
+90%            5              5       Variance       2.130414
+95%            5              5       Skewness       .5254236
+99%            5              5       Kurtosis       1.819253
+
+. sum qmv11_4  [w=rim_4_original],d
+(analytic weights assumed)
+
+                 Move: Reduce housing costs
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,125.103
+
+50%            3                      Mean           2.575751
+                        Largest       Std. Dev.      1.485414
+75%            4              5
+90%            5              5       Variance       2.206456
+95%            5              5       Skewness       .3281961
+99%            5              5       Kurtosis       1.676021
+
+. sum qmv11_5  [w=rim_4_original],d
+(analytic weights assumed)
+
+      Move: Change ownership status (either direction)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,125.103
+
+50%            1                      Mean            1.84277
+                        Largest       Std. Dev.      1.366749
+75%            3              5
+90%            4              5       Variance       1.868003
+95%            5              5       Skewness       1.323688
+99%            5              5       Kurtosis       3.225897
+
+. sum qmv11_6  [w=rim_4_original],d
+(analytic weights assumed)
+
+                 Move: New job/job transfer
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,125.103
+
+50%            1                      Mean           1.926816
+                        Largest       Std. Dev.      1.340024
+75%            3              5
+90%            4              5       Variance       1.795664
+95%            5              5       Skewness       1.098047
+99%            5              5       Kurtosis       2.738113
+
+. sum qmv11_7  [w=rim_4_original],d // TR: this one has tons of missing values 
+> because it was conditional on being married
+(analytic weights assumed)
+
+        Move: New job/job transfer of spouse/partner
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs                 722
+25%            1              1       Sum of Wgt.  723.321001
+
+50%            1                      Mean           1.850812
+                        Largest       Std. Dev.      1.283195
+75%            3              5
+90%            4              5       Variance       1.646591
+95%            5              5       Skewness         1.2112
+99%            5              5       Kurtosis       3.054933
+
+. sum qmv11_8  [w=rim_4_original],d
+(analytic weights assumed)
+
+           Move: Attend an educational institution
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.581
+
+50%            1                      Mean           1.401766
+                        Largest       Std. Dev.      .9742914
+75%            1              5
+90%            3              5       Variance       .9492436
+95%            4              5       Skewness       2.473722
+99%            5              5       Kurtosis       8.123429
+
+. sum qmv11_9  [w=rim_4_original],d
+(analytic weights assumed)
+
+                   Move: Reduce commuting
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.598
+
+50%            1                      Mean           1.752372
+                        Largest       Std. Dev.      1.231179
+75%            2              5
+90%            4              5       Variance       1.515801
+95%            5              5       Skewness       1.414628
+99%            5              5       Kurtosis        3.64844
+
+. sum qmv11_10 [w=rim_4_original],d
+(analytic weights assumed)
+
+                    Move: Look for a job
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.453
+
+50%            1                      Mean           1.630604
+                        Largest       Std. Dev.      1.140194
+75%            2              5
+90%            4              5       Variance       1.300042
+95%            4              5       Skewness       1.691709
+99%            5              5       Kurtosis       4.646385
+
+. sum qmv11_11 [w=rim_4_original],d
+(analytic weights assumed)
+
+        Move: Work experience would be more valuable
+                          elsewhere
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.414
+
+50%            1                      Mean           1.679037
+                        Largest       Std. Dev.      1.155723
+75%            2              5
+90%            4              5       Variance       1.335696
+95%            4              5       Skewness       1.560254
+99%            5              5       Kurtosis         4.2114
+
+. sum qmv11_12 [w=rim_4_original],d
+(analytic weights assumed)
+
+              Move: May gain Medicaid coverage
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.598
+
+50%            1                      Mean           1.403239
+                        Largest       Std. Dev.      .9807606
+75%            1              5
+90%            3              5       Variance       .9618913
+95%            4              5       Skewness       2.465153
+99%            5              5       Kurtosis       7.996617
+
+. sum qmv11_13 [w=rim_4_original],d
+(analytic weights assumed)
+
+         Move: May gain UI / other welfare benefits
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.414
+
+50%            1                      Mean            1.30532
+                        Largest       Std. Dev.      .8395571
+75%            1              5
+90%            2              5       Variance       .7048561
+95%            3              5       Skewness       2.947786
+99%            5              5       Kurtosis       11.07888
+
+. sum qmv11_14 [w=rim_4_original],d
+(analytic weights assumed)
+
+        Move: Change in household / family size (any
+                           reason)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,126.952
+
+50%            1                      Mean           1.939204
+                        Largest       Std. Dev.      1.339942
+75%            3              5
+90%            4              5       Variance       1.795445
+95%            5              5       Skewness       1.126203
+99%            5              5       Kurtosis       2.865973
+
+. sum qmv11_15 [w=rim_4_original],d
+(analytic weights assumed)
+
+        Move: Crowding, conflict, or violence in the
+                          household
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,125.103
+
+50%            1                      Mean            1.54884
+                        Largest       Std. Dev.      1.165584
+75%            1              5
+90%            4              5       Variance       1.358587
+95%            5              5       Skewness       1.949025
+99%            5              5       Kurtosis       5.342081
+
+. sum qmv11_16 [w=rim_4_original],d
+(analytic weights assumed)
+
+                    Move: Health reasons
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,147
+25%            1              1       Sum of Wgt.   1,127.643
+
+50%            1                      Mean           1.936872
+                        Largest       Std. Dev.       1.30359
+75%            3              5
+90%            4              5       Variance       1.699347
+95%            5              5       Skewness       1.110483
+99%            5              5       Kurtosis       2.892111
+
+. sum qmv11_17 [w=rim_4_original],d
+(analytic weights assumed)
+
+                 Move: Too much student debt
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,125.103
+
+50%            1                      Mean           1.364248
+                        Largest       Std. Dev.      .9568244
+75%            1              5
+90%            3              5       Variance       .9155129
+95%            4              5       Skewness       2.713439
+99%            5              5       Kurtosis       9.363772
+
+. sum qmv11_18 [w=rim_4_original],d
+(analytic weights assumed)
+
+                 Move: Too much other debts
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.   1,124.305
+
+50%            1                      Mean           1.631819
+                        Largest       Std. Dev.      1.155037
+75%            2              5
+90%            4              5       Variance       1.334111
+95%            5              5       Skewness       1.757083
+99%            5              5       Kurtosis       4.895894
+
+. sum qmv11_19 [w=rim_4_original],d
+(analytic weights assumed)
+
+      Move: Want to be closer to family / friends (any
+                           reason)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,147
+25%            1              1       Sum of Wgt.   1,127.643
+
+50%            2                      Mean           2.494393
+                        Largest       Std. Dev.       1.48706
+75%            4              5
+90%            5              5       Variance       2.211348
+95%            5              5       Skewness       .4031639
+99%            5              5       Kurtosis       1.702374
+
+. sum qmv11_20 [w=rim_4_original],d
+(analytic weights assumed)
+
+      Move: Want more desirable neighborhood / climate
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,125.103
+
+50%            3                      Mean             2.6156
+                        Largest       Std. Dev.      1.443292
+75%            4              5
+90%            5              5       Variance       2.083093
+95%            5              5       Skewness       .2082281
+99%            5              5       Kurtosis       1.628185
+
+. sum qmv11_21 [w=rim_4_original],d
+(analytic weights assumed)
+
+               Move: Want a safer neighborhood
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,143
+25%            1              1       Sum of Wgt.   1,123.546
+
+50%            2                      Mean           2.349251
+                        Largest       Std. Dev.       1.47518
+75%            4              5
+90%            5              5       Variance       2.176155
+95%            5              5       Skewness       .5404411
+99%            5              5       Kurtosis       1.778245
+
+. sum qmv11_22 [w=rim_4_original],d
+(analytic weights assumed)
+
+                  Move: Want better schools
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,125.103
+
+50%            1                      Mean           1.781839
+                        Largest       Std. Dev.      1.328328
+75%            2              5
+90%            4              5       Variance       1.764455
+95%            5              5       Skewness       1.394959
+99%            5              5       Kurtosis       3.395424
+
+. sum qmv11_23 [w=rim_4_original],d
+(analytic weights assumed)
+
+      Move: Want better access to public transportation
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,125.103
+
+50%            1                      Mean            1.70211
+                        Largest       Std. Dev.      1.161117
+75%            2              5
+90%            4              5       Variance       1.348194
+95%            4              5       Skewness       1.532646
+99%            5              5       Kurtosis       4.181247
+
+. sum qmv11_24 [w=rim_4_original],d
+(analytic weights assumed)
+
+      Move: Want access to public services (libraries,
+                     playgrounds, etc.)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,125.103
+
+50%            1                      Mean           1.828953
+                        Largest       Std. Dev.      1.240766
+75%            3              5
+90%            4              5       Variance       1.539501
+95%            5              5       Skewness       1.260557
+99%            5              5       Kurtosis       3.283684
+
+. sum qmv11_25 [w=rim_4_original],d
+(analytic weights assumed)
+
+            Move: Want better access to amenities
+           (restaurants, theaters, shopping, etc.)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,146
+25%            1              1       Sum of Wgt.   1,125.103
+
+50%            2                      Mean           2.120704
+                        Largest       Std. Dev.      1.295257
+75%            3              5
+90%            4              5       Variance       1.677691
+95%            5              5       Skewness       .7618126
+99%            5              5       Kurtosis       2.296943
+
+. sum qmv11_26 [w=rim_4_original],d
+(analytic weights assumed)
+
+        Move: Cultural values in other places are too
+                          different
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               1,145
+25%            1              1       Sum of Wgt.    1,124.23
+
+50%            1                      Mean           1.992699
+                        Largest       Std. Dev.      1.273175
+75%            3              5
+90%            4              5       Variance       1.620974
+95%            5              5       Skewness       1.001711
+99%            5              5       Kurtosis         2.7726
+
+. 
+. 
+. 
+. *----------------------------------------------------------------------------
+> --
+. * Compute descriptives
+. *----------------------------------------------------------------------------
+> --
+. include descriptives_Jan
+
+. 
+. ** Reasons for not moving
+. 
+. local v = 1
+
+. foreach var of varlist qmv10_* {
+  2.     qui gen t`var' = inlist(`var',4,5)*100 if !mi(`var')
+  3.     qui sum t`var' [aw=rim_4_original]
+  4.     if "`v'"=="1" local N_all = `r(N)'
+  5.     local mu`v'_all = `r(mean)'
+  6.     local sd`v'_all = `r(sd)'
+  7.     local mn`v'_all = `r(min)'
+  8.     local mx`v'_all = `r(max)'
+  9.     forval x=1/3 {
+ 10.         qui sum t`var' [aw=rim_4_original] if qmv12==`x'
+ 11.         local mu`v'_`x' = `r(mean)'
+ 12.         if "`v'"=="1" local N_`x' = `r(N)'
+ 13.     }
+ 14. local ++v
+ 15. }
+
+. 
+. capture file close T3
+
+. file open T3 using "${tablepath}ReasonsNotMove.tex", write replace
+
+. file write T3 "\begin{table}[ht]" _n 
+
+. file write T3 "\caption{Most common reasons to not move (\%)}" _n 
+
+. file write T3 "\label{tab:descT3}" _n 
+
+. file write T3 "\centering" _n 
+
+. file write T3 "\begin{threeparttable}" _n 
+
+. file write T3 "\begin{tabular}{lcccc}" _n 
+
+. file write T3 "\toprule " _n 
+
+. file write T3 "Reason & All & Mobile & Stuck & Rooted \\" _n 
+
+. file write T3 "\midrule " _n 
+
+. file write T3 "Like current home                                    " " & " %
+> 2.0f  (`mu1_all')  " & " %2.0f  (`mu1_1')  " & " %2.0f  (`mu1_2')  " & " %2.0
+> f  (`mu1_3')  " \\ "  _n 
+
+. file write T3 "Like neighborhood and climate                        " " & " %
+> 2.0f  (`mu22_all') " & " %2.0f  (`mu22_1') " & " %2.0f  (`mu22_2') " & " %2.0
+> f  (`mu22_3') " \\ "  _n 
+
+. file write T3 "Can't afford to buy home in places I want to move    " " & " %
+> 2.0f  (`mu3_all')  " & " %2.0f  (`mu3_1')  " & " %2.0f  (`mu3_2')  " & " %2.0
+> f  (`mu3_3')  " \\ "  _n 
+
+. file write T3 "Closeness to family and friends                      " " & " %
+> 2.0f  (`mu21_all') " & " %2.0f  (`mu21_1') " & " %2.0f  (`mu21_2') " & " %2.0
+> f  (`mu21_3') " \\ "  _n 
+
+. file write T3 "Can't afford high cost of moving                     " " & " %
+> 2.0f  (`mu2_all')  " & " %2.0f  (`mu2_1')  " & " %2.0f  (`mu2_2')  " & " %2.0
+> f  (`mu2_3')  " \\ "  _n 
+
+. file write T3 "Like my current job                                  " " & " %
+> 2.0f  (`mu8_all')  " & " %2.0f  (`mu8_1')  " & " %2.0f  (`mu8_2')  " & " %2.0
+> f  (`mu8_3')  " \\ "  _n 
+
+. file write T3 "Worry about crime rates in other locations           " " & " %
+> 2.0f  (`mu24_all') " & " %2.0f  (`mu24_1') " & " %2.0f  (`mu24_2') " & " %2.0
+> f  (`mu24_3') " \\ "  _n 
+
+. file write T3 "Hard to find job elsewhere                           " " & " %
+> 2.0f  (`mu9_all')  " & " %2.0f  (`mu9_1')  " & " %2.0f  (`mu9_2')  " & " %2.0
+> f  (`mu9_3')  " \\ "  _n 
+
+. file write T3 "Hard for spouse to find job elsewhere                " " & " %
+> 2.0f  (`mu10_all') " & " %2.0f  (`mu10_1') " & " %2.0f  (`mu10_2') " & " %2.0
+> f  (`mu10_3') " \\ "  _n 
+
+. file write T3 "Good quality of local schools                        " " & " %
+> 2.0f  (`mu20_all') " & " %2.0f  (`mu20_1') " & " %2.0f  (`mu20_2') " & " %2.0
+> f  (`mu20_3') " \\ "  _n 
+
+. file write T3 "Very involved in community/church--share values      " " & " %
+> 2.0f  (`mu23_all') " & " %2.0f  (`mu23_1') " & " %2.0f  (`mu23_2') " & " %2.0
+> f  (`mu23_3') " \\ "  _n 
+
+. file write T3 "Locked in low mortgage rate                          " " & " %
+> 2.0f  (`mu6_all')  " & " %2.0f  (`mu6_1')  " & " %2.0f  (`mu6_2')  " & " %2.0
+> f  (`mu6_3')  " \\ "  _n 
+
+. file write T3 "Difficult to qualify for new mortgage                " " & " %
+> 2.0f  (`mu7_all')  " & " %2.0f  (`mu7_1')  " & " %2.0f  (`mu7_2')  " & " %2.0
+> f  (`mu7_3')  " \\ "  _n 
+
+. file write T3 "May lose Medicaid coverage if I move to another state" " & " %
+> 2.0f  (`mu13_all') " & " %2.0f  (`mu13_1') " & " %2.0f  (`mu13_2') " & " %2.0
+> f  (`mu13_3') " \\ "  _n  
+
+. file write T3 "Am not licensed to work in other states              " " & " %
+> 2.0f  (`mu11_all') " & " %2.0f  (`mu11_1') " & " %2.0f  (`mu11_2') " & " %2.0
+> f  (`mu11_3') " \\ "  _n  
+
+. file write T3 "May lose or receive fewer welfare benefits           " " & " %
+> 2.0f  (`mu14_all') " & " %2.0f  (`mu14_1') " & " %2.0f  (`mu14_2') " & " %2.0
+> f  (`mu14_3') " \\ "  _n  
+
+. file write T3 "\midrule " _n
+
+. file write T3 "Sample size                     " " & " %5.0fc (`N_all') " & "
+>  %5.0fc (`N_1') " & " %5.0fc (`N_2') " & " %5.0fc (`N_3') " \\ "  _n 
+
+. file write T3 "\bottomrule " _n 
+
+. file write T3 "\end{tabular} " _n 
+
+. file write T3 "\footnotesize{Source: Survey of Consumer Expectations collecte
+> d in January 2018." _n 
+
+. file write T3 " " _n 
+
+. file write T3 "Note: Numbers are percentages of respondents who listed the re
+> ason as very important or extremely important. For details, see Section \ref{
+> sec:data}.}" _n 
+
+. file write T3 "\end{threeparttable} " _n 
+
+. file write T3 "\end{table} " _n 
+
+. file close T3
+
+. 
+. 
+. ** Reasons for moving
+. 
+. local v = 1
+
+. foreach var of varlist qmv11_* {
+  2.     qui gen t`var' = inlist(`var',4,5)*100 if !mi(`var')
+  3.     qui sum t`var' [aw=rim_4_original]
+  4.     if "`v'"=="1" local N_all = `r(N)'
+  5.     local mu`v'_all = `r(mean)'
+  6.     local sd`v'_all = `r(sd)'
+  7.     local mn`v'_all = `r(min)'
+  8.     local mx`v'_all = `r(max)'
+  9.     forval x=1/3 {
+ 10.         qui sum t`var' [aw=rim_4_original] if qmv12==`x'
+ 11.         local mu`v'_`x' = `r(mean)'
+ 12.         *if "`v'"=="19" local N_`x' = `r(N)'
+.     }
+ 13. local ++v
+ 14. }
+
+. 
+. capture file close T4
+
+. file open T4 using "${tablepath}ReasonsToMove.tex", write replace
+
+. file write T4 "\begin{table}[ht]" _n 
+
+. file write T4 "\caption{Most common reasons to move (\%)}" _n 
+
+. file write T4 "\label{tab:descT4}" _n 
+
+. file write T4 "\centering" _n 
+
+. file write T4 "\begin{threeparttable}" _n 
+
+. file write T4 "\begin{tabular}{lcccc}" _n 
+
+. file write T4 "\toprule " _n 
+
+. file write T4 "Reason & All & Mobile & Stuck & Rooted \\" _n 
+
+. file write T4 "\midrule " _n 
+
+. file write T4 "To be in a more desirable neighborhood or climate       " " & 
+> " %2.0f  (`mu20_all') " & " %2.0f  (`mu20_1') " & " %2.0f  (`mu20_2') " & " %
+> 2.0f  (`mu20_3') " \\ "  _n 
+
+. file write T4 "To reduce housing costs                                 " " & 
+> " %2.0f  (`mu4_all')  " & " %2.0f  (`mu4_1')  " & " %2.0f  (`mu4_2')  " & " %
+> 2.0f  (`mu4_3')  " \\ "  _n 
+
+. file write T4 "To be closer to family and friends                      " " & 
+> " %2.0f  (`mu19_all') " & " %2.0f  (`mu19_1') " & " %2.0f  (`mu19_2') " & " %
+> 2.0f  (`mu19_3') " \\ "  _n 
+
+. file write T4 "To be in a safer neighborhood                           " " & 
+> " %2.0f  (`mu21_all') " & " %2.0f  (`mu21_1') " & " %2.0f  (`mu21_2') " & " %
+> 2.0f  (`mu21_3') " \\ "  _n 
+
+. file write T4 "To upgrade to a larger/better quality home              " " & 
+> " %2.0f  (`mu3_all')  " & " %2.0f  (`mu3_1')  " & " %2.0f  (`mu3_2')  " & " %
+> 2.0f  (`mu3_3')  " \\ "  _n 
+
+. file write T4 "A new job or job transfer                               " " & 
+> " %2.0f  (`mu6_all')  " & " %2.0f  (`mu6_1')  " & " %2.0f  (`mu6_2')  " & " %
+> 2.0f  (`mu6_3')  " \\ "  _n 
+
+. file write T4 "Better access to amenities (restaurants, theaters, etc.)" " & 
+> " %2.0f  (`mu25_all') " & " %2.0f  (`mu25_1') " & " %2.0f  (`mu25_2') " & " %
+> 2.0f  (`mu25_3') " \\ "  _n 
+
+. file write T4 "To be in better school district/access to better schools" " & 
+> " %2.0f  (`mu22_all') " & " %2.0f  (`mu22_1') " & " %2.0f  (`mu22_2') " & " %
+> 2.0f  (`mu22_3') " \\ "  _n 
+
+. file write T4 "A new job or job transfer of spouse/partner             " " & 
+> " %2.0f  (`mu7_all')  " & " %2.0f  (`mu7_1')  " & " %2.0f  (`mu7_2')  " & " %
+> 2.0f  (`mu7_3')  " \\ "  _n 
+
+. file write T4 "Don't like my current home                              " " & 
+> " %2.0f  (`mu2_all')  " & " %2.0f  (`mu2_1')  " & " %2.0f  (`mu2_2')  " & " %
+> 2.0f  (`mu2_3')  " \\ "  _n 
+
+. file write T4 "Change in household composition                         " " & 
+> " %2.0f  (`mu14_all') " & " %2.0f  (`mu14_1') " & " %2.0f  (`mu14_2') " & " %
+> 2.0f  (`mu14_3') " \\ "  _n 
+
+. file write T4 "Cultural values                                         " " & 
+> " %2.0f  (`mu26_all') " & " %2.0f  (`mu26_1') " & " %2.0f  (`mu26_2') " & " %
+> 2.0f  (`mu26_3') " \\ "  _n 
+
+. file write T4 "To reduce commuting time to work/school                 " " & 
+> " %2.0f  (`mu9_all')  " & " %2.0f  (`mu9_1')  " & " %2.0f  (`mu9_2')  " & " %
+> 2.0f  (`mu9_3')  " \\ "  _n 
+
+. file write T4 "To look for a job                                       " " & 
+> " %2.0f  (`mu10_all') " & " %2.0f  (`mu10_1') " & " %2.0f  (`mu10_2') " & " %
+> 2.0f  (`mu10_3') " \\ "  _n  
+
+. file write T4 "May gain Medicaid coverage if I move to another state   " " & 
+> " %2.0f  (`mu12_all') " & " %2.0f  (`mu12_1') " & " %2.0f  (`mu12_2') " & " %
+> 2.0f  (`mu12_3') " \\ "  _n  
+
+. file write T4 "May gain or receive more welfare benefits               " " & 
+> " %2.0f  (`mu13_all') " & " %2.0f  (`mu13_1') " & " %2.0f  (`mu13_2') " & " %
+> 2.0f  (`mu13_3') " \\ "  _n  
+
+. file write T4 "\midrule " _n
+
+. file write T4 "Sample size                     " " & " %5.0fc (`N_all') " & "
+>  %5.0fc (`N_1') " & " %5.0fc (`N_2') " & " %5.0fc (`N_3') " \\ "  _n 
+
+. file write T4 "\bottomrule " _n 
+
+. file write T4 "\end{tabular} " _n 
+
+. file write T4 "\footnotesize{Source: Survey of Consumer Expectations collecte
+> d in January 2018." _n 
+
+. file write T4 " " _n 
+
+. file write T4 "Note: Numbers are percentages of respondents who listed the re
+> ason as very important or extremely important. For details, see Section \ref{
+> sec:data}.}" _n 
+
+. file write T4 "\end{threeparttable} " _n 
+
+. file write T4 "\end{table} " _n 
+
+. file close T4
+
+. 
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/SCE_descriptives_Jan.l
+> og
+  log type:  text
+ closed on:  15 Jun 2020, 08:42:34
+-------------------------------------------------------------------------------

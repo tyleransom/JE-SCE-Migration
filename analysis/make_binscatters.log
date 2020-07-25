@@ -1,0 +1,185 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/make_binscatters.log
+  log type:  text
+ opened on:  16 Jun 2020, 06:21:53
+
+. 
+. 
+. /****************************************************************************
+> ***
+> 
+> Plot three binscatters. Two of moving decisions vs. moving probability (1. fo
+> r
+> the full SCE panel and 2. for the september experimental survey respondents),
+>  
+> and one of WTP for moving vs. moving probability for all experimental survey 
+> respondents (september 2018 and december 2019). 
+> 
+> Outputs: 
+> 1. mobility_expectations_actual_mobility_fullcore.eps
+> 2. mobility_expectations_actual_mobility_sept.eps
+> 3. mobility_expectations_wtp.eps
+> 
+> *****************************************************************************
+> **/
+. 
+. 
+. 
+. 
+. 
+. /****************************************************************************
+> ***
+> 
+> Binscatter of moving decisions vs. moving probability
+> 
+> *****************************************************************************
+> **/
+. 
+. foreach data in "${datapath}sce_fullpanel_mobility" "${temppath}sept_responde
+> nts_with_model_estimates" {
+  2.     *
+.     * Loop over the two samples we use to make the binscatters
+.     *
+.     use `data', clear 
+  3. 
+.     *
+.     * Calculate individual's panel length in calendar months
+.     *
+.     bys scuid: egen maxmosnum = max(month)
+  4.     bys scuid: egen minmosnum = min(month)
+  5.     gen mosdiff = maxmosnum - minmosnum
+  6.     
+.     *
+.     * Dummy for ever moving in their time in the panel
+.     *
+.     bysort scuid (date): egen evermov=min(d3)
+  7.     replace evermov=0 if evermov==2
+  8.     
+.     *
+.     * Take moving prob for their first month of participation, collapse
+.     *
+.     gen mvprob=chance_move_residence if tenure==1
+  9.     collapse evermov mvprob mosdiff, by(scuid)
+ 10.         
+.     *
+.     * Binscatter using respondents with a panel length of 12 calendar mos
+.     *
+.     if "`data'"=="${datapath}sce_fullpanel_mobility" {
+ 11.         local suffix fullcore
+ 12.     }
+ 13.     if "`data'"=="${temppath}sept_respondents_with_model_estimates" {
+ 14.         local suffix sept
+ 15.     }
+ 16. 
+.     binscatter evermov mvprob if mosdiff==11                    ///
+>         ,                                                       ///
+>         xtitle("Probability of moving (next 12 months)")        ///
+>         ytitle("Proportion of respondents who ever moved")      ///
+>         ylab(0(.2).8) msymbol(circle_hollow) mcolor(black)      ///
+>         lcolor(red) line(qfit)
+ 17.     gr export ${graphpath}mobility_expectations_actual_mobility_`suffix'.e
+> ps, replace
+ 18. }
+(2689 missing values generated)
+(93,754 real changes made)
+(95,844 missing values generated)
+warning: nquantiles(20) was specified, but only 12 were generated. see help fil
+> e under nquantiles() for explanation.
+(file ../graphics/mobility_expectations_actual_mobility_fullcore.eps written in
+>  EPS format)
+(10,017 real changes made)
+(10,802 missing values generated)
+warning: nquantiles(20) was specified, but only 12 were generated. see help fil
+> e under nquantiles() for explanation.
+(file ../graphics/mobility_expectations_actual_mobility_sept.eps written in EPS
+>  format)
+
+. 
+. 
+. 
+. 
+. 
+. /****************************************************************************
+> ***
+> 
+> Binscatter of WTP for moving vs. moving probability
+> 
+> *****************************************************************************
+> **/
+. 
+. *
+. * Keep moving probability for Sept 2018 respondents
+. *
+. use ${datapath}sce_fullpanel_mobility, clear 
+
+. keep if date==201809
+(110,183 observations deleted)
+
+. keep scuid date chance_move_residence 
+
+. 
+. *
+. * Add on Dec 2019 respondents with their most recent core data merged on
+. *
+. append using ${datapath}dec19_experiment_respondents_move_prob 
+(note: variable date was long, now double to accommodate using data's values)
+
+. 
+. *
+. * Merge with the individual model estimates 
+. *
+. merge 1:1 scuid using ${temppath}model_output, keep(3)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             2,110  (_merge==3)
+    -----------------------------------------
+
+. 
+. *
+. * Save binscatter median data to fit a quadratic later
+. * 
+. binscatter wtp_frac_moved chance_move_residence     ///
+>     ,                                               ///
+>     graphregion(color(white))                       ///
+>     median linetype(none) replace                   ///
+>     savedata(${temppath}binscatter_data_mobexpect_wtp)  
+warning: nquantiles(20) was specified, but only 13 were generated. see help fil
+> e under nquantiles() for explanation.
+(file ../temp/binscatter_data_mobexpect_wtp.csv written containing saved data)
+(file ../temp/binscatter_data_mobexpect_wtp.do written containing commands to p
+> rocess saved data)
+
+. 
+. *
+. * Bring back data, make the figure
+. *
+. import delimited using ${temppath}binscatter_data_mobexpect_wtp.csv, clear
+(2 vars, 13 obs)
+
+. 
+. twoway  (scatter wtp_frac_moved chance_move_residence       ///
+>     ,                                                       ///
+>     msymbol(circle_hollow) mcolor(black))                   ///
+>     (qfit wtp_frac_moved chance_move_residence              ///
+>     ,                                                       ///
+>     lcolor(red))                                            ///
+>     ,                                                       ///
+>     legend(off)                                             ///
+>     graphregion(color(white))                               ///
+>     xtitle("Probability of moving (next 12 months)")        ///
+>     ytitle("Median WTP (% of income) for moving")               
+
+. gr export ${graphpath}mobility_expectations_wtp.eps, replace
+(file ../graphics/mobility_expectations_wtp.eps written in EPS format)
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/make_binscatters.log
+  log type:  text
+ closed on:  16 Jun 2020, 06:21:54
+-------------------------------------------------------------------------------

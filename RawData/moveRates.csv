@@ -1,0 +1,316 @@
+﻿year,type,rate
+2018,total,9.8
+2017,total,10.6
+2016,total,10.7
+2015,total,11.1
+2014,total,11.2
+2013,total,11.4
+2012,total,11.6
+2011,total,11.2
+2010,total,12.1
+2009,total,12.1
+2008,total,11.5
+2007,total,12.8
+2006,total,13.3
+2005,total,13.2
+2004,total,13.3
+2003,total,13.74028511
+2002,total,14.21771642
+2001,total,13.5668993
+2000,total,15.4
+1999,total,15.4
+1998,total,15.6
+1997,total,16
+1996,total,15.8
+1995,total,16.1
+1994,total,16.3
+1993,total,16.5
+1992,total,16.8
+1991,total,16.4
+1990,total,17.3
+1989,total,17.2
+1988,total,17.3
+1987,total,18.1
+1986,total,18
+1985,total,19.6
+1984,total,16.8
+1983,total,16.1
+1982,total,16.6
+1981,total,16.6
+1976,total,17.1
+1971,total,17.9
+1970,total,18.4
+1969,total,18.3
+1968,total,18.8
+1967,total,18.3
+1966,total,19.3
+1965,total,20.1
+1964,total,19.6
+1963,total,19.4
+1962,total,19.1
+1961,total,20
+1960,total,19.4
+1959,total,19.2
+1958,total,19.8
+1957,total,19.4
+1956,total,20.5
+1955,total,19.9
+1954,total,18.6
+1953,total,20.1
+1952,total,19.8
+1951,total,21
+1950,total,18.7
+1949,total,18.8
+1948,total,19.9
+2018,same county,6.2
+2017,same county,6.8
+2016,same county,6.9
+2015,same county,7.3
+2014,same county,7.6
+2013,same county,7.5
+2012,same county,7.7
+2011,same county,7.7
+2010,same county,8.6
+2009,same county,8.4
+2008,same county,7.8
+2007,same county,8.6
+2006,same county,8.6
+2005,same county,7.9
+2004,same county,7.9
+2003,same county,8.305610215
+2002,same county,8.524590164
+2001,same county,7.988748345
+2000,same county,9
+1999,same county,9.4
+1998,same county,10.2
+1997,same county,10.5
+1996,same county,10.3
+1995,same county,10.8
+1994,same county,10.4
+1993,same county,10.7
+1992,same county,10.7
+1991,same county,10.3
+1990,same county,10.6
+1989,same county,10.9
+1988,same county,11
+1987,same county,11.6
+1986,same county,11.3
+1985,same county,13.1
+1984,same county,10.4
+1983,same county,10.1
+1982,same county,10.3
+1981,same county,10.4
+1976,same county,10.8
+1971,same county,11.4
+1970,same county,11.7
+1969,same county,11.7
+1968,same county,11.8
+1967,same county,11.6
+1966,same county,12.7
+1965,same county,13.4
+1964,same county,13
+1963,same county,12.6
+1962,same county,13
+1961,same county,13.7
+1960,same county,12.9
+1959,same county,13.1
+1958,same county,13.1
+1957,same county,13.1
+1956,same county,13.7
+1955,same county,13.3
+1954,same county,12.2
+1953,same county,13.5
+1952,same county,13.2
+1951,same county,13.9
+1950,same county,13.1
+1949,same county,13
+1948,same county,13.6
+2018,different county same state,2
+2017,different county same state,2.1
+2016,different county same state,2.4
+2015,different county same state,2.1
+2014,different county same state,2.1
+2013,different county same state,2.3
+2012,different county same state,2.2
+2011,different county same state,1.9
+2010,different county same state,2.1
+2009,different county same state,2.1
+2008,different county same state,2.1
+2007,different county same state,2.5
+2006,different county same state,2.8
+2005,different county same state,2.7
+2004,different county same state,2.8
+2003,different county same state,2.735033055
+2002,different county same state,2.899769917
+2001,different county same state,2.761936546
+2000,different county same state,3.3
+1999,different county same state,3.1
+1998,different county same state,3
+1997,different county same state,3
+1996,different county same state,3.1
+1995,different county same state,3.1
+1994,different county same state,3.2
+1993,different county same state,3.1
+1992,different county same state,3.2
+1991,different county same state,3.2
+1990,different county same state,3.3
+1989,different county same state,3.3
+1988,different county same state,3.3
+1987,different county same state,3.7
+1986,different county same state,3.7
+1985,different county same state,3.5
+1984,different county same state,3.6
+1983,different county same state,3.3
+1982,different county same state,3.3
+1981,different county same state,3.4
+1976,different county same state,3.4
+1971,different county same state,3.1
+1970,different county same state,3.1
+1969,different county same state,3.2
+1968,different county same state,3.4
+1967,different county same state,3.3
+1966,different county same state,3.3
+1965,different county same state,3.5
+1964,different county same state,3.3
+1963,different county same state,3.1
+1962,different county same state,3
+1961,different county same state,3.1
+1960,different county same state,3.3
+1959,different county same state,3.2
+1958,different county same state,3.4
+1957,different county same state,3.2
+1956,different county same state,3.6
+1955,different county same state,3.5
+1954,different county same state,3.2
+1953,different county same state,3
+1952,different county same state,3.2
+1951,different county same state,3.6
+1950,different county same state,3
+1949,different county same state,2.8
+1948,different county same state,3.3
+2018,different state,1.5
+2017,different state,1.7
+2016,different state,1.5
+2015,different state,1.6
+2014,different state,1.5
+2013,different state,1.6
+2012,different state,1.7
+2011,different state,1.6
+2010,different state,1.4
+2009,different state,1.6
+2008,different state,1.6
+2007,different state,1.7
+2006,different state,2
+2005,different state,2.6
+2004,different state,2.6
+2003,different state,2.699641841
+2002,different state,2.793356342
+2001,different state,2.816214412
+2000,different state,3.1
+1999,different state,2.8
+1998,different state,2.4
+1997,different state,2.4
+1996,different state,2.5
+1995,different state,2.2
+1994,different state,2.6
+1993,different state,2.7
+1992,different state,2.9
+1991,different state,2.9
+1990,different state,3.3
+1989,different state,3
+1988,different state,3
+1987,different state,2.8
+1986,different state,3
+1985,different state,3
+1984,different state,2.8
+1983,different state,2.7
+1982,different state,3
+1981,different state,2.8
+1976,different state,3
+1971,different state,3.4
+1970,different state,3.6
+1969,different state,3.4
+1968,different state,3.6
+1967,different state,3.4
+1966,different state,3.3
+1965,different state,3.3
+1964,different state,3.3
+1963,different state,3.6
+1962,different state,3.1
+1961,different state,3.2
+1960,different state,3.2
+1959,different state,3
+1958,different state,3.3
+1957,different state,3.1
+1956,different state,3.1
+1955,different state,3.1
+1954,different state,3.2
+1953,different state,3.6
+1952,different state,3.4
+1951,different state,3.5
+1950,different state,2.6
+1949,different state,3
+1948,different state,3.1
+2018,different county,3.5
+2017,different county,3.8
+2016,different county,3.9
+2015,different county,3.7
+2014,different county,3.6
+2013,different county,3.9
+2012,different county,3.9
+2011,different county,3.5
+2010,different county,3.5
+2009,different county,3.7
+2008,different county,3.7
+2007,different county,4.2
+2006,different county,4.8
+2005,different county,5.3
+2004,different county,5.4
+2003,different county,5.434674896
+2002,different county,5.693126259
+2001,different county,5.578150958
+2000,different county,6.4
+1999,different county,5.9
+1998,different county,5.4
+1997,different county,5.4
+1996,different county,5.6
+1995,different county,5.3
+1994,different county,5.8
+1993,different county,5.8
+1992,different county,6.1
+1991,different county,6.1
+1990,different county,6.6
+1989,different county,6.3
+1988,different county,6.3
+1987,different county,6.5
+1986,different county,6.7
+1985,different county,6.5
+1984,different county,6.4
+1983,different county,6
+1982,different county,6.3
+1981,different county,6.2
+1976,different county,6.4
+1971,different county,6.5
+1970,different county,6.7
+1969,different county,6.6
+1968,different county,7
+1967,different county,6.7
+1966,different county,6.6
+1965,different county,6.8
+1964,different county,6.6
+1963,different county,6.7
+1962,different county,6.1
+1961,different county,6.3
+1960,different county,6.5
+1959,different county,6.2
+1958,different county,6.7
+1957,different county,6.3
+1956,different county,6.7
+1955,different county,6.6
+1954,different county,6.4
+1953,different county,6.6
+1952,different county,6.6
+1951,different county,7.1
+1950,different county,5.6
+1949,different county,5.8
+1948,different county,6.4

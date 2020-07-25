@@ -1,0 +1,142 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/prepare_data_for_binsc
+> atters.log
+  log type:  text
+ opened on:  16 Jun 2020, 06:21:52
+
+. 
+. 
+. 
+. 
+. 
+. /****************************************************************************
+> ***
+> 
+> Formats the individual-level model output and creates a seperate sample of 
+> SCE core mobility data for respondents who participated in the september 2018
+>  
+> experimental survey. 
+> 
+> Outputs:
+> 1. model_output.dta
+> 2. sept_respondents_with_model_estimates.dta
+> 
+> *****************************************************************************
+> **/
+. 
+. 
+. 
+. 
+. 
+. /****************************************************************************
+> ***
+> 
+> Format the model output
+> 
+> *****************************************************************************
+> **/
+. local rawmodelout individual_level_neighborhood_refb_full_intvws_no_sepC4_p01
+> _SepDec_indiv
+
+. local wtplist income homecost crime dist family size mvcost taxes norms schqu
+> al copyhome moved
+
+. 
+. use ${temppath}`rawmodelout'.dta, clear
+
+. 
+. foreach v in `wtplist' {        
+  2.         *
+.         * Set wtp values to missing if missing t statistic
+.         *
+.         replace wtp_`v' = . if missing(t_`v')
+  3.         replace wtp_frac_`v' = . if missing(t_`v')
+  4.         
+.     /*
+>         *
+>         * Flip sign
+>         *
+>         replace wtp_`v' = wtp_`v'*-1
+>         replace wtp_frac_`v' = wtp_frac_`v'*-1
+>     */
+. }
+(296 real changes made, 296 to missing)
+(296 real changes made, 296 to missing)
+(1,245 real changes made, 1,245 to missing)
+(1,245 real changes made, 1,245 to missing)
+(734 real changes made, 734 to missing)
+(734 real changes made, 734 to missing)
+(296 real changes made, 296 to missing)
+(296 real changes made, 296 to missing)
+(723 real changes made, 723 to missing)
+(723 real changes made, 723 to missing)
+(1,637 real changes made, 1,637 to missing)
+(1,637 real changes made, 1,637 to missing)
+(1,637 real changes made, 1,637 to missing)
+(1,637 real changes made, 1,637 to missing)
+(1,634 real changes made, 1,634 to missing)
+(1,634 real changes made, 1,634 to missing)
+(1,245 real changes made, 1,245 to missing)
+(1,245 real changes made, 1,245 to missing)
+(1,245 real changes made, 1,245 to missing)
+(1,245 real changes made, 1,245 to missing)
+(1,245 real changes made, 1,245 to missing)
+(1,245 real changes made, 1,245 to missing)
+(294 real changes made, 294 to missing)
+(294 real changes made, 294 to missing)
+
+. 
+. save ${temppath}model_output, replace 
+file ../temp/model_output.dta saved
+
+. 
+. 
+. 
+. 
+. 
+. /****************************************************************************
+> ***
+> 
+> Select sample of core with model estimates from the september 2018 experiment
+> 
+> *****************************************************************************
+> **/
+. use ${datapath}sce_fullpanel_mobility, clear
+
+. 
+. *
+. * Keep sept respondents' full panel data
+. *
+. gen sept_dummy = 0
+
+. replace sept_dummy = 1 if date==201809
+(1,302 real changes made)
+
+. bys scuid: egen present_in_sept = max(sept_dummy)
+
+. keep if present_in_sept==1
+(98,068 observations deleted)
+
+. 
+. merge m:1 scuid using ${temppath}model_output, keep(3) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                            11,910  
+    -----------------------------------------
+
+. 
+. save ${temppath}sept_respondents_with_model_estimates, replace 
+file ../temp/sept_respondents_with_model_estimates.dta saved
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/prepare_data_for_binsc
+> atters.log
+  log type:  text
+ closed on:  16 Jun 2020, 06:21:53
+-------------------------------------------------------------------------------

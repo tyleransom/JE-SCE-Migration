@@ -1,0 +1,1031 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/SCE_mobility_refb_full
+> _intvws_noSepC4_p01_SepDec_noP0_samecity_ENE.log
+  log type:  text
+ opened on:  16 Jun 2020, 07:31:27
+
+. 
+. use ${temppath}alldata_refb_full_intvws_noSepC4_p01_SepDec_noP0_samecity, cle
+> ar
+
+. 
+. preserve
+
+.     use ${temppath}alldata_refb_full_intvws_noSepC4_p01_SepDec_samecity, clea
+> r
+
+.     contract scuid rim_4_original hhincome empFT
+
+.     count
+  2,110
+
+.     
+.     qui sum hhincome [w=rim_4_original], d
+
+.     global medinc `r(p50)'
+
+.     qui sum hhincome [w=rim_4_original] if empFT==0, d
+
+.     global empFTmedinc `r(p50)'
+
+.     qui sum hhincome [w=rim_4_original] if empFT==1, d
+
+.     global nonempMedinc `r(p50)'
+
+. restore
+
+. 
+. *----------------------------------------------------------------------------
+> --
+. * Estimate location attribute models
+. *----------------------------------------------------------------------------
+> --
+. global Suffix = "RefBFullIntvwsNoSepC4p01SepDecNoP0SameCityENEbswtp"
+
+. 
+. * estimate group-level models by employed full-time/not
+. local  scenarios income homecost crime dist family size mvcost taxes norms sc
+> hqual withincitymove copyhome moved
+
+. global Suffix = "RefBFullIntvwsNoSepC4p01SepDecNoP0SameCityENEbswtp"
+
+. 
+. include groupestimation_samecity_inclDec_newWTP_ENE_bswtp
+
+. 
+. xtset scuid
+       panel variable:  scuid (unbalanced)
+
+. preserve
+
+. capture drop indivscen
+
+. egen indivscen = group(scuid svyblk scennum)
+
+. * now estimate for various subpopulations
+. 
+. set seed 1001
+
+. bootstrap, cluster(scuid) reps(${nreps}): qreg ratio `scenarios'
+(running qreg on estimation sample)
+
+Bootstrap replications (1000)
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+..................................................  1000
+
+Median regression                                   Number of obs =     55,608
+  Raw sum of deviations 86476.52 (about 0)
+  Min sum of deviations 79572.62                    Pseudo R2     =     0.0798
+
+                               (Replications based on 1,861 clusters in scuid)
+------------------------------------------------------------------------------
+             |   Observed   Bootstrap                         Normal-based
+       ratio |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      income |   3.757815    .181875    20.66   0.000     3.401347    4.114284
+    homecost |  -.7986078   .0999435    -7.99   0.000    -.9944935    -.602722
+       crime |  -.6405422    .035718   -17.93   0.000    -.7105483   -.5705361
+        dist |  -.0549714   .0063196    -8.70   0.000    -.0673576   -.0425852
+      family |   2.131734   .1150022    18.54   0.000     1.906333    2.357134
+        size |   .6359945   .0365657    17.39   0.000     .5643269     .707662
+      mvcost |     -.0397   .0041886    -9.48   0.000    -.0479095   -.0314906
+       taxes |  -.0403194   .0028128   -14.33   0.000    -.0458324   -.0348065
+       norms |   .1543551   .0157297     9.81   0.000     .1235255    .1851848
+     schqual |   .2387317   .0292126     8.17   0.000     .1814761    .2959873
+withincity~e |    1.69741    .120839    14.05   0.000     1.460569     1.93425
+    copyhome |   .1101973   .0872063     1.26   0.206    -.0607239    .2811186
+       moved |  -2.579067   .1219361   -21.15   0.000    -2.818058   -2.340077
+       _cons |  -.0338534   .0214666    -1.58   0.115     -.075927    .0082203
+------------------------------------------------------------------------------
+
+. est sto all
+
+. qui distinct scuid if e(sample)
+
+. local N_unique = `r(ndistinct)'
+
+. qui distinct indivscen if e(sample)
+
+. local N_scen = `r(ndistinct)'
+
+. qui outreg2 using ${tablepath}model2Est${Suffix}.tex, replace  se bdec(3) sde
+> c(3) tex(frag) ctitle("all") addstat("Individual-Scenarios",`N_scen',"Individ
+> uals",`N_unique')
+ : 
+. 
+. set seed 1001
+
+. bootstrap homecost_wtp = (-(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*${medi
+> nc}) crime_wtp = (-(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*${medinc}) dist_wtp
+>  = (-(exp(-_b[dist]/_b[income])-1)*${medinc}) family_wtp = (-(exp(-_b[family]
+> /_b[income])-1)*${medinc}) size_wtp = (-(exp(-_b[size]/_b[income])-1)*${medin
+> c}) mvcost_wtp = (-(exp(-_b[mvcost]/_b[income]*5)-1)*${medinc}) taxes_wtp = (
+> -(exp(-_b[taxes]/_b[income]*5)-1)*${medinc}) norms_wtp = (-(exp(-_b[norms]/_b
+> [income])-1)*${medinc}) schqual_wtp = (-(exp(-_b[schqual]/_b[income])-1)*${me
+> dinc}) withincity_wtp = (-(exp(-_b[withincitymove]/_b[income])-1)*${medinc}) 
+> copyhome_wtp = (-(exp(-_b[copyhome]/_b[income])-1)*${medinc}) moved_wtp = (-(
+> exp(-_b[moved]/_b[income])-1)*${medinc}), cluster(scuid) reps(${nreps}): qreg
+>  ratio `scenarios'
+(running qreg on estimation sample)
+
+Bootstrap replications (1000)
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+..................................................  1000
+
+Bootstrap results                               Number of obs     =     55,608
+                                                Replications      =      1,000
+
+      command:  qreg ratio income homecost crime dist family size mvcost
+                    taxes norms schqual withincitymove copyhome moved
+ homecost_wtp:  -(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*67500
+    crime_wtp:  -(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*67500
+     dist_wtp:  -(exp(-_b[dist]/_b[income])-1)*67500
+   family_wtp:  -(exp(-_b[family]/_b[income])-1)*67500
+     size_wtp:  -(exp(-_b[size]/_b[income])-1)*67500
+   mvcost_wtp:  -(exp(-_b[mvcost]/_b[income]*5)-1)*67500
+    taxes_wtp:  -(exp(-_b[taxes]/_b[income]*5)-1)*67500
+    norms_wtp:  -(exp(-_b[norms]/_b[income])-1)*67500
+  schqual_wtp:  -(exp(-_b[schqual]/_b[income])-1)*67500
+withincity_~p:  -(exp(-_b[withincitymove]/_b[income])-1)*67500
+ copyhome_wtp:  -(exp(-_b[copyhome]/_b[income])-1)*67500
+    moved_wtp:  -(exp(-_b[moved]/_b[income])-1)*67500
+
+                               (Replications based on 1,861 clusters in scuid)
+------------------------------------------------------------------------------
+             |   Observed   Bootstrap                         Normal-based
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+homecost_wtp |  -2666.741   322.5814    -8.27   0.000    -3298.989   -2034.493
+   crime_wtp |  -8465.455   291.1473   -29.08   0.000    -9036.093   -7894.817
+    dist_wtp |  -994.6846   106.6854    -9.32   0.000    -1203.784    -785.585
+  family_wtp |   29223.06   1084.898    26.94   0.000      27096.7    31349.42
+    size_wtp |   10509.66   328.2205    32.02   0.000     9866.359    11152.96
+  mvcost_wtp |  -3661.425   353.6607   -10.35   0.000    -4354.587   -2968.263
+   taxes_wtp |  -3720.095   198.7097   -18.72   0.000    -4109.559   -3330.632
+   norms_wtp |   2716.442   250.7476    10.83   0.000     2224.986    3207.898
+ schqual_wtp |   4154.858    473.334     8.78   0.000      3227.14    5082.576
+withincity~p |   24533.26   1473.091    16.65   0.000     21646.05    27420.46
+copyhome_wtp |   1950.685   1502.687     1.30   0.194    -994.5275    4895.897
+   moved_wtp |   -66581.6   4272.553   -15.58   0.000    -74955.65   -58207.55
+------------------------------------------------------------------------------
+
+. qui distinct scuid if e(sample)
+
+. local N_unique = `r(ndistinct)'
+
+. qui distinct indivscen if e(sample)
+
+. local N_scen = `r(ndistinct)'
+
+. qui outreg2 using ${tablepath}model2WTPincome${Suffix}.tex, replace  se bdec(
+> 0) sdec(0) tex(frag) ctitle("all")  addstat("Individual-Scenarios",`N_scen',"
+> Individuals",`N_unique')
+ : 
+. 
+. set seed 1001
+
+. bootstrap homecost_wtp = (-(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*100) c
+> rime_wtp = (-(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*100) dist_wtp = (-(exp(-_
+> b[dist]/_b[income])-1)*100) family_wtp = (-(exp(-_b[family]/_b[income])-1)*10
+> 0) size_wtp = (-(exp(-_b[size]/_b[income])-1)*100) mvcost_wtp = (-(exp(-_b[mv
+> cost]/_b[income]*5)-1)*100) taxes_wtp = (-(exp(-_b[taxes]/_b[income]*5)-1)*10
+> 0) norms_wtp = (-(exp(-_b[norms]/_b[income])-1)*100) schqual_wtp = (-(exp(-_b
+> [schqual]/_b[income])-1)*100) withincity_wtp = (-(exp(-_b[withincitymove]/_b[
+> income])-1)*100) copyhome_wtp = (-(exp(-_b[copyhome]/_b[income])-1)*100) move
+> d_wtp = (-(exp(-_b[moved]/_b[income])-1)*100), cluster(scuid) reps(${nreps}):
+>  qreg ratio `scenarios'
+(running qreg on estimation sample)
+
+Bootstrap replications (1000)
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+..................................................  1000
+
+Bootstrap results                               Number of obs     =     55,608
+                                                Replications      =      1,000
+
+      command:  qreg ratio income homecost crime dist family size mvcost
+                    taxes norms schqual withincitymove copyhome moved
+ homecost_wtp:  -(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*100
+    crime_wtp:  -(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*100
+     dist_wtp:  -(exp(-_b[dist]/_b[income])-1)*100
+   family_wtp:  -(exp(-_b[family]/_b[income])-1)*100
+     size_wtp:  -(exp(-_b[size]/_b[income])-1)*100
+   mvcost_wtp:  -(exp(-_b[mvcost]/_b[income]*5)-1)*100
+    taxes_wtp:  -(exp(-_b[taxes]/_b[income]*5)-1)*100
+    norms_wtp:  -(exp(-_b[norms]/_b[income])-1)*100
+  schqual_wtp:  -(exp(-_b[schqual]/_b[income])-1)*100
+withincity_~p:  -(exp(-_b[withincitymove]/_b[income])-1)*100
+ copyhome_wtp:  -(exp(-_b[copyhome]/_b[income])-1)*100
+    moved_wtp:  -(exp(-_b[moved]/_b[income])-1)*100
+
+                               (Replications based on 1,861 clusters in scuid)
+------------------------------------------------------------------------------
+             |   Observed   Bootstrap                         Normal-based
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+homecost_wtp |  -3.950727   .4778983    -8.27   0.000    -4.887391   -3.014064
+   crime_wtp |  -12.54142   .4313295   -29.08   0.000    -13.38681   -11.69602
+    dist_wtp |  -1.473607   .1580525    -9.32   0.000    -1.783384    -1.16383
+  family_wtp |   43.29343   1.607256    26.94   0.000     40.14326    46.44359
+    size_wtp |   15.56987   .4862526    32.02   0.000     14.61683     16.5229
+  mvcost_wtp |  -5.424334   .5239417   -10.35   0.000    -6.451241   -4.397427
+   taxes_wtp |  -5.511252   .2943847   -18.72   0.000    -6.088236   -4.934269
+   norms_wtp |   4.024359    .371478    10.83   0.000     3.296275    4.752442
+ schqual_wtp |   6.155345   .7012356     8.78   0.000     4.780949    7.529742
+withincity~p |   36.34557   2.182357    16.65   0.000     32.06822    40.62291
+copyhome_wtp |   2.889904   2.226203     1.30   0.194    -1.473374    7.253181
+   moved_wtp |   -98.6394   6.329708   -15.58   0.000    -111.0454    -86.2334
+------------------------------------------------------------------------------
+
+. qui distinct scuid if e(sample)
+
+. local N_unique = `r(ndistinct)'
+
+. qui distinct indivscen if e(sample)
+
+. local N_scen = `r(ndistinct)'
+
+. qui outreg2 using ${tablepath}model2WTPincomePct${Suffix}.tex, replace  se bd
+> ec(2) sdec(2) tex(frag) ctitle("all")  addstat("Individual-Scenarios",`N_scen
+> ',"Individuals",`N_unique')
+ : 
+. 
+. 
+. * now for "employed"
+. set seed 1001
+
+. bootstrap if empFT==1, cluster(scuid) reps(${nreps}): qreg ratio `scenarios'
+(running qreg on estimation sample)
+
+Bootstrap replications (1000)
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+..................................................  1000
+
+Median regression                                   Number of obs =     31,192
+  Raw sum of deviations 48121.83 (about 0)
+  Min sum of deviations  44333.7                    Pseudo R2     =     0.0787
+
+                               (Replications based on 1,043 clusters in scuid)
+------------------------------------------------------------------------------
+             |   Observed   Bootstrap                         Normal-based
+       ratio |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      income |    4.32346   .2419043    17.87   0.000     3.849337    4.797584
+    homecost |   -.582763   .1210824    -4.81   0.000    -.8200802   -.3454459
+       crime |  -.6592831   .0491546   -13.41   0.000    -.7556244   -.5629419
+        dist |  -.0401139    .007161    -5.60   0.000    -.0541492   -.0260786
+      family |   1.931396   .1296701    14.89   0.000     1.677247    2.185544
+        size |   .6141131   .1716344     3.58   0.000     .2777159    .9505104
+      mvcost |   -.031997   .0084799    -3.77   0.000    -.0486173   -.0153767
+       taxes |   -.045828    .003443   -13.31   0.000    -.0525762   -.0390798
+       norms |     .12274   .0222343     5.52   0.000     .0791616    .1663184
+     schqual |   .1843116   .0425498     4.33   0.000     .1009155    .2677077
+withincity~e |   1.925896   .1547261    12.45   0.000     1.622638    2.229153
+    copyhome |   .1050437   .0983443     1.07   0.285    -.0877077     .297795
+       moved |  -2.509856   .1420022   -17.67   0.000    -2.788175   -2.231536
+       _cons |  -.0449105    .017119    -2.62   0.009    -.0784631   -.0113578
+------------------------------------------------------------------------------
+
+. est sto employed
+
+. qui distinct scuid if e(sample)
+
+. local N_unique = `r(ndistinct)'
+
+. qui distinct indivscen if e(sample)
+
+. local N_scen = `r(ndistinct)'
+
+. qui outreg2 using ${tablepath}model2Est${Suffix}.tex, append se bdec(3) sdec(
+> 3) tex(frag) ctitle("employed") addstat("Individual-Scenarios",`N_scen',"Indi
+> viduals",`N_unique')
+ : 
+. 
+. set seed 1001
+
+. bootstrap homecost_wtp = (-(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*${empF
+> Tmedinc}) crime_wtp = (-(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*${empFTmedinc}
+> ) dist_wtp = (-(exp(-_b[dist]/_b[income])-1)*${empFTmedinc}) family_wtp = (-(
+> exp(-_b[family]/_b[income])-1)*${empFTmedinc}) size_wtp = (-(exp(-_b[size]/_b
+> [income])-1)*${empFTmedinc}) mvcost_wtp = (-(exp(-_b[mvcost]/_b[income]*5)-1)
+> *${empFTmedinc}) taxes_wtp = (-(exp(-_b[taxes]/_b[income]*5)-1)*${empFTmedinc
+> }) norms_wtp = (-(exp(-_b[norms]/_b[income])-1)*${empFTmedinc}) schqual_wtp =
+>  (-(exp(-_b[schqual]/_b[income])-1)*${empFTmedinc}) withincity_wtp = (-(exp(-
+> _b[withincitymove]/_b[income])-1)*${empFTmedinc}) copyhome_wtp = (-(exp(-_b[c
+> opyhome]/_b[income])-1)*${empFTmedinc}) moved_wtp = (-(exp(-_b[moved]/_b[inco
+> me])-1)*${empFTmedinc}), cluster(scuid) reps(${nreps}): qreg ratio `scenarios
+> ' if empFT==1
+(running qreg on estimation sample)
+
+Bootstrap replications (1000)
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+..................................................  1000
+
+Bootstrap results                               Number of obs     =     31,192
+                                                Replications      =      1,000
+
+      command:  qreg ratio income homecost crime dist family size mvcost
+                    taxes norms schqual withincitymove copyhome moved
+ homecost_wtp:  -(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*45000
+    crime_wtp:  -(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*45000
+     dist_wtp:  -(exp(-_b[dist]/_b[income])-1)*45000
+   family_wtp:  -(exp(-_b[family]/_b[income])-1)*45000
+     size_wtp:  -(exp(-_b[size]/_b[income])-1)*45000
+   mvcost_wtp:  -(exp(-_b[mvcost]/_b[income]*5)-1)*45000
+    taxes_wtp:  -(exp(-_b[taxes]/_b[income]*5)-1)*45000
+    norms_wtp:  -(exp(-_b[norms]/_b[income])-1)*45000
+  schqual_wtp:  -(exp(-_b[schqual]/_b[income])-1)*45000
+withincity_~p:  -(exp(-_b[withincitymove]/_b[income])-1)*45000
+ copyhome_wtp:  -(exp(-_b[copyhome]/_b[income])-1)*45000
+    moved_wtp:  -(exp(-_b[moved]/_b[income])-1)*45000
+
+                               (Replications based on 1,043 clusters in scuid)
+------------------------------------------------------------------------------
+             |   Observed   Bootstrap                         Normal-based
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+homecost_wtp |  -1119.589   237.8095    -4.71   0.000    -1585.687   -653.4904
+   crime_wtp |  -5016.867   316.1875   -15.87   0.000    -5636.583   -4397.151
+    dist_wtp |  -419.4618   74.42205    -5.64   0.000    -565.3263   -273.5973
+  family_wtp |   16212.59   648.9932    24.98   0.000     14940.59     17484.6
+    size_wtp |   5958.685   1607.205     3.71   0.000      2808.62    9108.749
+  mvcost_wtp |  -1696.369   464.5772    -3.65   0.000    -2606.924   -785.8148
+   taxes_wtp |  -2449.298   139.7001   -17.53   0.000    -2723.105   -2175.491
+   norms_wtp |   1259.555   223.6851     5.63   0.000     821.1404     1697.97
+ schqual_wtp |    1878.06   423.8167     4.43   0.000     1047.395    2708.725
+withincity~p |   16175.95   933.9532    17.32   0.000     14345.44    18006.46
+copyhome_wtp |   1080.154    997.341     1.08   0.279    -874.5982    3034.907
+   moved_wtp |  -35413.54   1942.296   -18.23   0.000    -39220.37   -31606.71
+------------------------------------------------------------------------------
+
+. qui distinct scuid if e(sample)
+
+. local N_unique = `r(ndistinct)'
+
+. qui distinct indivscen if e(sample)
+
+. local N_scen = `r(ndistinct)'
+
+. qui outreg2 using ${tablepath}model2WTPincome${Suffix}.tex, append se bdec(0)
+>  sdec(0) tex(frag) ctitle("employed")  addstat("Individual-Scenarios",`N_scen
+> ',"Individuals",`N_unique')
+ : 
+. 
+. set seed 1001
+
+. bootstrap homecost_wtp = (-(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*100) c
+> rime_wtp = (-(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*100) dist_wtp = (-(exp(-_
+> b[dist]/_b[income])-1)*100) family_wtp = (-(exp(-_b[family]/_b[income])-1)*10
+> 0) size_wtp = (-(exp(-_b[size]/_b[income])-1)*100) mvcost_wtp = (-(exp(-_b[mv
+> cost]/_b[income]*5)-1)*100) taxes_wtp = (-(exp(-_b[taxes]/_b[income]*5)-1)*10
+> 0) norms_wtp = (-(exp(-_b[norms]/_b[income])-1)*100) schqual_wtp = (-(exp(-_b
+> [schqual]/_b[income])-1)*100) withincity_wtp = (-(exp(-_b[withincitymove]/_b[
+> income])-1)*100) copyhome_wtp = (-(exp(-_b[copyhome]/_b[income])-1)*100) move
+> d_wtp = (-(exp(-_b[moved]/_b[income])-1)*100), cluster(scuid) reps(${nreps}):
+>  qreg ratio `scenarios' if empFT==1
+(running qreg on estimation sample)
+
+Bootstrap replications (1000)
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+..................................................  1000
+
+Bootstrap results                               Number of obs     =     31,192
+                                                Replications      =      1,000
+
+      command:  qreg ratio income homecost crime dist family size mvcost
+                    taxes norms schqual withincitymove copyhome moved
+ homecost_wtp:  -(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*100
+    crime_wtp:  -(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*100
+     dist_wtp:  -(exp(-_b[dist]/_b[income])-1)*100
+   family_wtp:  -(exp(-_b[family]/_b[income])-1)*100
+     size_wtp:  -(exp(-_b[size]/_b[income])-1)*100
+   mvcost_wtp:  -(exp(-_b[mvcost]/_b[income]*5)-1)*100
+    taxes_wtp:  -(exp(-_b[taxes]/_b[income]*5)-1)*100
+    norms_wtp:  -(exp(-_b[norms]/_b[income])-1)*100
+  schqual_wtp:  -(exp(-_b[schqual]/_b[income])-1)*100
+withincity_~p:  -(exp(-_b[withincitymove]/_b[income])-1)*100
+ copyhome_wtp:  -(exp(-_b[copyhome]/_b[income])-1)*100
+    moved_wtp:  -(exp(-_b[moved]/_b[income])-1)*100
+
+                               (Replications based on 1,043 clusters in scuid)
+------------------------------------------------------------------------------
+             |   Observed   Bootstrap                         Normal-based
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+homecost_wtp |  -2.487974   .5284656    -4.71   0.000    -3.523748   -1.452201
+   crime_wtp |  -11.14859    .702639   -15.87   0.000    -12.52574   -9.771446
+    dist_wtp |  -.9321373   .1653823    -5.64   0.000    -1.256281   -.6079939
+  family_wtp |   36.02798   1.442207    24.98   0.000     33.20131    38.85466
+    size_wtp |   13.24152   3.571567     3.71   0.000     6.241378    20.24167
+  mvcost_wtp |   -3.76971   1.032394    -3.65   0.000    -5.793164   -1.746255
+   taxes_wtp |  -5.442885   .3104446   -17.53   0.000    -6.051345   -4.834425
+   norms_wtp |   2.799011   .4970779     5.63   0.000     1.824756    3.773266
+ schqual_wtp |   4.173467   .9418148     4.43   0.000     2.327543     6.01939
+withincity~p |   35.94656   2.075452    17.32   0.000     31.87875    40.01437
+copyhome_wtp |   2.400343   2.216313     1.08   0.279    -1.943552    6.744237
+   moved_wtp |  -78.69675   4.316213   -18.23   0.000    -87.15637   -70.23713
+------------------------------------------------------------------------------
+
+. qui distinct scuid if e(sample)
+
+. local N_unique = `r(ndistinct)'
+
+. qui distinct indivscen if e(sample)
+
+. local N_scen = `r(ndistinct)'
+
+. qui outreg2 using ${tablepath}model2WTPincomePct${Suffix}.tex, append se bdec
+> (2) sdec(2) tex(frag) ctitle("employed")  addstat("Individual-Scenarios",`N_s
+> cen',"Individuals",`N_unique')
+ : 
+. 
+. 
+. * now for "non-employed"
+. set seed 1001
+
+. bootstrap if empFT==0, cluster(scuid) reps(${nreps}): qreg ratio `scenarios'
+(running qreg on estimation sample)
+
+Bootstrap replications (1000)
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+..................................................  1000
+
+Median regression                                   Number of obs =     24,416
+  Raw sum of deviations 38354.69 (about 0)
+  Min sum of deviations 35007.57                    Pseudo R2     =     0.0873
+
+                                 (Replications based on 818 clusters in scuid)
+------------------------------------------------------------------------------
+             |   Observed   Bootstrap                         Normal-based
+       ratio |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      income |   3.477212   .2992575    11.62   0.000     2.890678    4.063746
+    homecost |  -.7869585   .1200103    -6.56   0.000    -1.022174   -.5517426
+       crime |  -.5867825   .0519153   -11.30   0.000    -.6885347   -.4850304
+        dist |  -.0541695   .0066258    -8.18   0.000    -.0671558   -.0411833
+      family |   2.352227   .1911936    12.30   0.000     1.977495     2.72696
+        size |   .6049767   .0776586     7.79   0.000     .4527686    .7571848
+      mvcost |  -.0429161   .0039052   -10.99   0.000    -.0505701    -.035262
+       taxes |  -.0350004   .0037374    -9.36   0.000    -.0423256   -.0276752
+       norms |   .1387194   .0143718     9.65   0.000     .1105511    .1668876
+     schqual |   .2218651   .0354394     6.26   0.000     .1524052     .291325
+withincity~e |   1.246933   .2143918     5.82   0.000      .826733    1.667134
+    copyhome |   .1318056   .1137035     1.16   0.246    -.0910492    .3546605
+       moved |  -2.876631   .2111576   -13.62   0.000    -3.290493    -2.46277
+       _cons |  -.0065912   .0138091    -0.48   0.633    -.0336565    .0204742
+------------------------------------------------------------------------------
+
+. est sto non_employed
+
+. qui distinct scuid if e(sample)
+
+. local N_unique = `r(ndistinct)'
+
+. qui distinct indivscen if e(sample)
+
+. local N_scen = `r(ndistinct)'
+
+. qui outreg2 using ${tablepath}model2Est${Suffix}.tex, append se bdec(3) sdec(
+> 3) tex(frag) ctitle("non-employed") addstat("Individual-Scenarios",`N_scen',"
+> Individuals",`N_unique')
+ : 
+. 
+. set seed 1001
+
+. bootstrap homecost_wtp = (-(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*${none
+> mpMedinc}) crime_wtp = (-(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*${nonempMedin
+> c}) dist_wtp = (-(exp(-_b[dist]/_b[income])-1)*${nonempMedinc}) family_wtp = 
+> (-(exp(-_b[family]/_b[income])-1)*${nonempMedinc}) size_wtp = (-(exp(-_b[size
+> ]/_b[income])-1)*${nonempMedinc}) mvcost_wtp = (-(exp(-_b[mvcost]/_b[income]*
+> 5)-1)*${nonempMedinc}) taxes_wtp = (-(exp(-_b[taxes]/_b[income]*5)-1)*${nonem
+> pMedinc}) norms_wtp = (-(exp(-_b[norms]/_b[income])-1)*${nonempMedinc}) schqu
+> al_wtp = (-(exp(-_b[schqual]/_b[income])-1)*${nonempMedinc}) withincity_wtp =
+>  (-(exp(-_b[withincitymove]/_b[income])-1)*${nonempMedinc}) copyhome_wtp = (-
+> (exp(-_b[copyhome]/_b[income])-1)*${nonempMedinc}) moved_wtp = (-(exp(-_b[mov
+> ed]/_b[income])-1)*${nonempMedinc}), cluster(scuid) reps(${nreps}): qreg rati
+> o `scenarios' if empFT==0
+(running qreg on estimation sample)
+
+Bootstrap replications (1000)
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+..................................................  1000
+
+Bootstrap results                               Number of obs     =     24,416
+                                                Replications      =      1,000
+
+      command:  qreg ratio income homecost crime dist family size mvcost
+                    taxes norms schqual withincitymove copyhome moved
+ homecost_wtp:  -(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*87500
+    crime_wtp:  -(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*87500
+     dist_wtp:  -(exp(-_b[dist]/_b[income])-1)*87500
+   family_wtp:  -(exp(-_b[family]/_b[income])-1)*87500
+     size_wtp:  -(exp(-_b[size]/_b[income])-1)*87500
+   mvcost_wtp:  -(exp(-_b[mvcost]/_b[income]*5)-1)*87500
+    taxes_wtp:  -(exp(-_b[taxes]/_b[income]*5)-1)*87500
+    norms_wtp:  -(exp(-_b[norms]/_b[income])-1)*87500
+  schqual_wtp:  -(exp(-_b[schqual]/_b[income])-1)*87500
+withincity_~p:  -(exp(-_b[withincitymove]/_b[income])-1)*87500
+ copyhome_wtp:  -(exp(-_b[copyhome]/_b[income])-1)*87500
+    moved_wtp:  -(exp(-_b[moved]/_b[income])-1)*87500
+
+                                 (Replications based on 818 clusters in scuid)
+------------------------------------------------------------------------------
+             |   Observed   Bootstrap                         Normal-based
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+homecost_wtp |  -3686.019   495.1816    -7.44   0.000    -4656.558   -2715.481
+   crime_wtp |  -10857.42   268.5703   -40.43   0.000    -11383.81   -10331.03
+    dist_wtp |  -1373.786   105.6234   -13.01   0.000    -1580.804   -1166.768
+  family_wtp |   43014.23   1741.911    24.69   0.000     39600.14    46428.31
+    size_wtp |   13972.79   1286.709    10.86   0.000     11450.89    16494.69
+  mvcost_wtp |  -5569.752    127.493   -43.69   0.000    -5819.634   -5319.871
+   taxes_wtp |  -4516.421   349.1538   -12.94   0.000     -5200.75   -3832.093
+   norms_wtp |   3421.999   188.8632    18.12   0.000     3051.834    3792.164
+ schqual_wtp |   5408.594    745.847     7.25   0.000      3946.76    6870.427
+withincity~p |   26367.89   3597.366     7.33   0.000     19317.18    33418.59
+copyhome_wtp |   3254.661   2650.389     1.23   0.219    -1940.005    8449.328
+   moved_wtp |  -112620.5   13342.58    -8.44   0.000    -138771.5   -86469.54
+------------------------------------------------------------------------------
+
+. qui distinct scuid if e(sample)
+
+. local N_unique = `r(ndistinct)'
+
+. qui distinct indivscen if e(sample)
+
+. local N_scen = `r(ndistinct)'
+
+. qui outreg2 using ${tablepath}model2WTPincome${Suffix}.tex, append se bdec(0)
+>  sdec(0) tex(frag) ctitle("non-employed")  addstat("Individual-Scenarios",`N_
+> scen',"Individuals",`N_unique')
+ : 
+. 
+. set seed 1001
+
+. bootstrap homecost_wtp = (-(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*100) c
+> rime_wtp = (-(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*100) dist_wtp = (-(exp(-_
+> b[dist]/_b[income])-1)*100) family_wtp = (-(exp(-_b[family]/_b[income])-1)*10
+> 0) size_wtp = (-(exp(-_b[size]/_b[income])-1)*100) mvcost_wtp = (-(exp(-_b[mv
+> cost]/_b[income]*5)-1)*100) taxes_wtp = (-(exp(-_b[taxes]/_b[income]*5)-1)*10
+> 0) norms_wtp = (-(exp(-_b[norms]/_b[income])-1)*100) schqual_wtp = (-(exp(-_b
+> [schqual]/_b[income])-1)*100) withincity_wtp = (-(exp(-_b[withincitymove]/_b[
+> income])-1)*100) copyhome_wtp = (-(exp(-_b[copyhome]/_b[income])-1)*100) move
+> d_wtp = (-(exp(-_b[moved]/_b[income])-1)*100), cluster(scuid) reps(${nreps}):
+>  qreg ratio `scenarios' if empFT==0
+(running qreg on estimation sample)
+
+Bootstrap replications (1000)
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+..................................................   500
+..................................................   550
+..................................................   600
+..................................................   650
+..................................................   700
+..................................................   750
+..................................................   800
+..................................................   850
+..................................................   900
+..................................................   950
+..................................................  1000
+
+Bootstrap results                               Number of obs     =     24,416
+                                                Replications      =      1,000
+
+      command:  qreg ratio income homecost crime dist family size mvcost
+                    taxes norms schqual withincitymove copyhome moved
+ homecost_wtp:  -(exp(-_b[homecost]/_b[income]*ln( 1.2 ))-1)*100
+    crime_wtp:  -(exp(-_b[crime]/_b[income]*ln( 2 ))-1)*100
+     dist_wtp:  -(exp(-_b[dist]/_b[income])-1)*100
+   family_wtp:  -(exp(-_b[family]/_b[income])-1)*100
+     size_wtp:  -(exp(-_b[size]/_b[income])-1)*100
+   mvcost_wtp:  -(exp(-_b[mvcost]/_b[income]*5)-1)*100
+    taxes_wtp:  -(exp(-_b[taxes]/_b[income]*5)-1)*100
+    norms_wtp:  -(exp(-_b[norms]/_b[income])-1)*100
+  schqual_wtp:  -(exp(-_b[schqual]/_b[income])-1)*100
+withincity_~p:  -(exp(-_b[withincitymove]/_b[income])-1)*100
+ copyhome_wtp:  -(exp(-_b[copyhome]/_b[income])-1)*100
+    moved_wtp:  -(exp(-_b[moved]/_b[income])-1)*100
+
+                                 (Replications based on 818 clusters in scuid)
+------------------------------------------------------------------------------
+             |   Observed   Bootstrap                         Normal-based
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+homecost_wtp |  -4.212594   .5659219    -7.44   0.000     -5.32178   -3.103407
+   crime_wtp |  -12.40848   .3069375   -40.43   0.000    -13.01007   -11.80689
+    dist_wtp |  -1.570041   .1207125   -13.01   0.000    -1.806633   -1.333449
+  family_wtp |   49.15911   1.990756    24.69   0.000     45.25731    53.06092
+    size_wtp |    15.9689   1.470525    10.86   0.000     13.08673    18.85108
+  mvcost_wtp |  -6.365431   .1457064   -43.69   0.000    -6.651011   -6.079852
+   taxes_wtp |  -5.161624   .3990329   -12.94   0.000    -5.943715   -4.379534
+   norms_wtp |   3.910856   .2158437    18.12   0.000      3.48781    4.333902
+ schqual_wtp |    6.18125   .8523967     7.25   0.000     4.510583    7.851917
+withincity~p |   30.13473   4.111276     7.33   0.000     22.07677    38.19268
+copyhome_wtp |   3.719613   3.029016     1.23   0.219    -2.217149    9.656375
+   moved_wtp |  -128.7092   15.24867    -8.44   0.000     -158.596   -98.82233
+------------------------------------------------------------------------------
+
+. qui distinct scuid if e(sample)
+
+. local N_unique = `r(ndistinct)'
+
+. qui distinct indivscen if e(sample)
+
+. local N_scen = `r(ndistinct)'
+
+. qui outreg2 using ${tablepath}model2WTPincomePct${Suffix}.tex, append se bdec
+> (2) sdec(2) tex(frag) ctitle("non-employed")  addstat("Individual-Scenarios",
+> `N_scen',"Individuals",`N_unique')
+ : 
+. 
+. 
+. est table all employed non_employed, b(%9.3f) stats(N) star keep(`scenarios')
+>  title("Estimates of migration tastes across various subpopulations")
+
+Estimates of migration tastes across various subpopulations
+
+-----------------------------------------------------------
+    Variable |     all          employed     non_employed  
+-------------+---------------------------------------------
+      income |     3.758***       4.323***       3.477***  
+    homecost |    -0.799***      -0.583***      -0.787***  
+       crime |    -0.641***      -0.659***      -0.587***  
+        dist |    -0.055***      -0.040***      -0.054***  
+      family |     2.132***       1.931***       2.352***  
+        size |     0.636***       0.614***       0.605***  
+      mvcost |    -0.040***      -0.032***      -0.043***  
+       taxes |    -0.040***      -0.046***      -0.035***  
+       norms |     0.154***       0.123***       0.139***  
+     schqual |     0.239***       0.184***       0.222***  
+withincity~e |     1.697***       1.926***       1.247***  
+    copyhome |     0.110          0.105          0.132     
+       moved |    -2.579***      -2.510***      -2.877***  
+-------------+---------------------------------------------
+           N |     55608          31192          24416     
+-----------------------------------------------------------
+                   legend: * p<0.05; ** p<0.01; *** p<0.001
+
+. restore
+
+. 
+. ******* Clean up tex files
+. * change VARIABLES notation (default for outreg2)
+. !sed -i "s|3.altnum|Alternative 3 dummy|ig"   "${tablepath}model2Est${Suffix}
+> .tex"
+
+
+. !sed -i "s|VARIABLES|Characteristic|ig" "${tablepath}model2Est${Suffix}.tex"
+
+
+. !sed -i "s|VARIABLES|Characteristic|ig" "${tablepath}model2WTPincome${Suffix}
+> .tex"
+
+
+. !sed -i "s|VARIABLES|Characteristic|ig" "${tablepath}model2WTPincomePct${Suff
+> ix}.tex"
+
+
+. 
+. !sed -i "s|income|Income|ig" "${tablepath}model2Est${Suffix}.tex"
+
+
+. !sed -i "s|income|Income|ig" "${tablepath}model2WTPincome${Suffix}.tex"
+
+
+. !sed -i "s|income|Income|ig" "${tablepath}model2WTPincomePct${Suffix}.tex"
+
+
+. 
+. !sed -i "s|homecost|Housing costs|ig"     "${tablepath}model2Est${Suffix}.tex
+> "
+
+
+. !sed -i "s|homecost\\\_wtp|Housing costs|ig" "${tablepath}model2WTPincome${Su
+> ffix}.tex"
+
+
+. !sed -i "s|homecost\\\_wtp|Housing costs|ig" "${tablepath}model2WTPincomePct$
+> {Suffix}.tex"
+
+
+. 
+. !sed -i "s|crime|Crime|ig"     "${tablepath}model2Est${Suffix}.tex"
+
+
+. !sed -i "s|crime\\\_wtp|Crime|ig" "${tablepath}model2WTPincome${Suffix}.tex"
+
+
+. !sed -i "s|crime\\\_wtp|Crime|ig" "${tablepath}model2WTPincomePct${Suffix}.te
+> x"
+
+
+. 
+. !sed -i "s|dist|Distance|ig"     "${tablepath}model2Est${Suffix}.tex"
+
+
+. !sed -i "s|dist\\\_wtp|Distance|ig" "${tablepath}model2WTPincome${Suffix}.tex
+> "
+
+
+. !sed -i "s|dist\\\_wtp|Distance|ig" "${tablepath}model2WTPincomePct${Suffix}.
+> tex"
+
+
+. 
+. !sed -i "s|family|Family nearby|ig"     "${tablepath}model2Est${Suffix}.tex"
+
+
+. !sed -i "s|family\\\_wtp|Family nearby|ig" "${tablepath}model2WTPincome${Suff
+> ix}.tex"
+
+
+. !sed -i "s|family\\\_wtp|Family nearby|ig" "${tablepath}model2WTPincomePct${S
+> uffix}.tex"
+
+
+. 
+. !sed -i "s|size|House square footage|ig"     "${tablepath}model2Est${Suffix}.
+> tex"
+
+
+. !sed -i "s|size\\\_wtp|House square footage|ig" "${tablepath}model2WTPincome$
+> {Suffix}.tex"
+
+
+. !sed -i "s|size\\\_wtp|House square footage|ig" "${tablepath}model2WTPincomeP
+> ct${Suffix}.tex"
+
+
+. 
+. !sed -i "s|mvcost|Financial moving costs|ig"     "${tablepath}model2Est${Suff
+> ix}.tex"
+
+
+. !sed -i "s|mvcost\\\_wtp|Financial moving costs|ig" "${tablepath}model2WTPinc
+> ome${Suffix}.tex"
+
+
+. !sed -i "s|mvcost\\\_wtp|Financial moving costs|ig" "${tablepath}model2WTPinc
+> omePct${Suffix}.tex"
+
+
+. 
+. !sed -i "s|taxes|Taxes|ig"     "${tablepath}model2Est${Suffix}.tex"
+
+
+. !sed -i "s|taxes\\\_wtp|Taxes|ig" "${tablepath}model2WTPincome${Suffix}.tex"
+
+
+. !sed -i "s|taxes\\\_wtp|Taxes|ig" "${tablepath}model2WTPincomePct${Suffix}.te
+> x"
+
+
+. 
+. !sed -i "s|norms|Local cultural norms|ig"     "${tablepath}model2Est${Suffix}
+> .tex"
+
+
+. !sed -i "s|norms\\\_wtp|Local cultural norms|ig" "${tablepath}model2WTPincome
+> ${Suffix}.tex"
+
+
+. !sed -i "s|norms\\\_wtp|Local cultural norms|ig" "${tablepath}model2WTPincome
+> Pct${Suffix}.tex"
+
+
+. 
+. !sed -i "s|copyhome|Exact copy of current home|ig"     "${tablepath}model2Est
+> ${Suffix}.tex"
+
+
+. !sed -i "s|copyhome\\\_wtp|Exact copy of current home|ig" "${tablepath}model2
+> WTPincome${Suffix}.tex"
+
+
+. !sed -i "s|copyhome\\\_wtp|Exact copy of current home|ig" "${tablepath}model2
+> WTPincomePct${Suffix}.tex"
+
+
+. 
+. !sed -i "s|schqual|Local school quality|ig"     "${tablepath}model2Est${Suffi
+> x}.tex"
+
+
+. !sed -i "s|schqual\\\_wtp|Local school quality|ig" "${tablepath}model2WTPinco
+> me${Suffix}.tex"
+
+
+. !sed -i "s|schqual\\\_wtp|Local school quality|ig" "${tablepath}model2WTPinco
+> mePct${Suffix}.tex"
+
+
+. 
+. !sed -i "s|withincitymove|Local move|ig"     "${tablepath}model2Est${Suffix}.
+> tex"
+
+
+. !sed -i "s|withincity\\\_wtp|Local move|ig" "${tablepath}model2WTPincome${Suf
+> fix}.tex"
+
+
+. !sed -i "s|withincity\\\_wtp|Local move|ig" "${tablepath}model2WTPincomePct${
+> Suffix}.tex"
+
+
+. 
+. !sed -i "s|moved|Nonpecuniary moving costs|ig"     "${tablepath}model2Est${Su
+> ffix}.tex"
+
+
+. !sed -i "s|moved\\\_wtp|Nonpecuniary moving costs|ig" "${tablepath}model2WTPi
+> ncome${Suffix}.tex"
+
+
+. !sed -i "s|moved\\\_wtp|Nonpecuniary moving costs|ig" "${tablepath}model2WTPi
+> ncomePct${Suffix}.tex"
+
+
+. 
+. 
+. * remove rows that talk about statistical significance or standard errors
+. !sed -i '/multicolumn/d' ${tablepath}model2Est${Suffix}.tex
+
+
+. !sed -i '/multicolumn/d' ${tablepath}model2WTPincome${Suffix}.tex
+
+
+. !sed -i '/multicolumn/d' ${tablepath}model2WTPincomePct${Suffix}.tex
+
+
+. 
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/data/ransom/JE-SCE-Migration/analysis/SCE_mobility_refb_full
+> _intvws_noSepC4_p01_SepDec_noP0_samecity_ENE.log
+  log type:  text
+ closed on:  16 Jun 2020, 14:28:05
+-------------------------------------------------------------------------------
